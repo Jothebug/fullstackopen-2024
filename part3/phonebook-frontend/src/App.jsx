@@ -30,10 +30,10 @@ const App = () => {
         name: person.newName,
         number: person.newNumber,
       });
-      setPersons(() => res.data);
+      setPersons(persons.concat(res.data));
       setPerson({ newName: "", newNumber: "" });
     } catch (error) {
-      handleNotification({ type: "error", message: error.message });
+      handleNotification({ type: "error", message: error.response.data.error });
     }
   };
 
@@ -68,7 +68,6 @@ const App = () => {
   };
 
   const onDelete = async (person) => {
-    ``;
     const askingResult = window.confirm(`Delete ${person.name}?`);
     if (askingResult) {
       try {

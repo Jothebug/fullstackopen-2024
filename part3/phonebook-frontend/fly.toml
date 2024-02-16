@@ -1,14 +1,15 @@
-# fly.toml app configuration file generated for phonebook-frontend-fso2024 on 2024-02-16T10:23:18+07:00
+# fly.toml app configuration file generated for phonebook-frontend-fso2024-black-river-1596 on 2024-02-16T10:43:02+07:00
 #
 # See https://fly.io/docs/reference/configuration/ for information about how to use this file.
 #
 
-app = 'phonebook-frontend-fso2024'
+app = 'phonebook-frontend-fso2024-black-river-1596'
 primary_region = 'sin'
 
 [build]
+
 [env]
-  PORT = "80"
+  PORT = '80'
 
 [http_service]
   internal_port = 80

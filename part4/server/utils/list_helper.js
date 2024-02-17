@@ -10,7 +10,7 @@ const totalLikes = (blogs) => {
 
 // ex: 4.5*
 const favoriteBlog = (blogs) => {
-  if (blogs.length === 0) return {};
+  if (blogs.length === 0) return null;
 
   const favoriteBlog = blogs.reduce(
     (acc, item) => (acc.likes > item.likes ? acc : item),

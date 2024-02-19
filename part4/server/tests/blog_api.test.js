@@ -6,18 +6,19 @@ const mongoose = require("mongoose");
 const app = require("../app");
 const Blog = require("../models/blog");
 const { initialBlogs, blogsInDb } = require("./test_helper");
-const logger = require("../utils/logger");
 
 const api = supertest(app);
 
 beforeEach(async () => {
+  // await Blog.deleteMany({});
+  // let blogObject = new Blog(initialBlogs[0]);
+  // await blogObject.save();
+  // blogObject = new Blog(initialBlogs[1]);
+  // await blogObject.save();
   await Blog.deleteMany({});
-
-  let blogObject = new Blog(initialBlogs[0]);
-  await blogObject.save();
-
-  blogObject = new Blog(initialBlogs[1]);
-  await blogObject.save();
+  const blogObject = initialBlogs.map((blog) => new Blog(blog));
+  const promiseArray = blogObject.map((blog) => blog.save());
+  await Promise.all(promiseArray);
 });
 
 describe("ex:4.8-testing GET method", () => {

@@ -1,0 +1,93 @@
+const { test, after, beforeEach, describe } = require("node:test");
+const assert = require("node:assert");
+const supertest = require("supertest");
+const mongoose = require("mongoose");
+
+const app = require("../app");
+const Blog = require("../models/blog");
+const { initialBlogs, blogsInDb } = require("./test_helper");
+const logger = require("../utils/logger");
+
+const api = supertest(app);
+
+beforeEach(async () => {
+  await Blog.deleteMany({});
+
+  let blogObject = new Blog(initialBlogs[0]);
+  await blogObject.save();
+
+  blogObject = new Blog(initialBlogs[1]);
+  await blogObject.save();
+});
+
+describe("ex:4.8-testing GET method", () => {
+  test("blogs are returned as json", async () => {
+    await api
+      .get("/api/blogs")
+      .expect(200)
+      .expect("Content-Type", /application\/json/);
+  });
+
+  test("blogs are returned with the correct amount of blog posts", async () => {
+    const response = await api.get("/api/blogs");
+    assert.strictEqual(response.body.length, initialBlogs.length);
+  });
+});
+
+test("ex:4.9-testing the unique identifier property", async () => {
+  const response = await api.get("/api/blogs");
+  response.body.forEach((item = {}) => {
+    assert(Object.keys(item).includes("id"));
+  });
+});
+
+describe("ex:4.10/4.11-testing POST method", () => {
+  test("ex:4.10-a valid blog can be added", async () => {
+    const newBlog = {
+      title: "First class tests",
+      author: "Robert C. Martin",
+      url: "http://blog.cleancoder.com/uncle-bob/2017/05/05/TestDefinitions.htmll",
+      likes: 10,
+    };
+
+    const resAddedBlog = await api
+      .post("/api/blogs")
+      .send(newBlog)
+      .expect(201)
+      .expect("Content-Type", /application\/json/);
+
+    const allBlogs = await blogsInDb();
+    // verify the total number of blogs equals with the total number of initialBlogs plus one
+    assert.strictEqual(allBlogs.length, initialBlogs.length + 1);
+    // verify the content of the blog post is saved correctly to the database
+    assert.deepStrictEqual(resAddedBlog.body, allBlogs[allBlogs.length - 1]);
+  });
+
+  test("ex:4.11-adding blog with valid likes", async () => {
+    const newBlog = {
+      title: "Type wars",
+      author: "Robert C. Martin",
+      url: "http://blog.cleancoder.com/uncle-bob/2016/05/01/TypeWars.html",
+    };
+
+    const resAddedBlog = await api
+      .post("/api/blogs")
+      .send(newBlog)
+      .expect(201)
+      .expect("Content-Type", /application\/json/);
+
+    assert(Object.keys(resAddedBlog.body).includes("likes"));
+    assert("likes" in resAddedBlog.body);
+  });
+
+  test("ex:4.12-verify when request data misses required property with status code 400", async () => {
+    const newBlog = {
+      title: "testing 400 error",
+      url: "http://blog.cleancoder.com/uncle-bob/2016/05/01/TypeWars.html",
+    };
+
+    await api.post("/api/blogs").send(newBlog).expect(400);
+  });
+});
+
+after(async () => await mongoose.connection.close());

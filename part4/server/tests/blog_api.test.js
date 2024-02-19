@@ -41,7 +41,7 @@ test("ex:4.9-testing the unique identifier property", async () => {
   });
 });
 
-describe("ex:4.10/4.11-testing POST method", () => {
+describe("ex:4.10->4.12-testing POST method", () => {
   test("ex:4.10-a valid blog can be added", async () => {
     const newBlog = {
       title: "First class tests",
@@ -87,6 +87,29 @@ describe("ex:4.10/4.11-testing POST method", () => {
     };
 
     await api.post("/api/blogs").send(newBlog).expect(400);
+  });
+
+  test("ex:4.13-testing DELETE method", async () => {
+    const blogsAtStart = await blogsInDb();
+    const blogToDelete = blogsAtStart[0];
+
+    await api.delete(`/api/blogs/${blogToDelete.id}`).expect(204);
+
+    const blogsAtEnd = await blogsInDb();
+    const blogsId = blogsAtEnd.map((i) => i.id);
+    assert(!blogsId.includes(blogToDelete.id));
+  });
+
+  test("ex:4.14-testing PUT method", async () => {
+    const blogsAtStart = await blogsInDb();
+    const blogToUpdate = blogsAtStart[0];
+
+    const updatedPost = await api
+      .put(`/api/blogs/${blogToUpdate.id}`, { likes: blogToUpdate.likes + 1 })
+      .expect(200)
+      .expect("Content-Type", /application\/json/);
+
+    assert.deepStrictEqual(blogToUpdate, updatedPost.body);
   });
 });
 

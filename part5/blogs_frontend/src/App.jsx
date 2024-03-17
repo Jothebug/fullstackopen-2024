@@ -1,14 +1,13 @@
-import { useState, useEffect, useCallback } from "react";
-import { Notification, Blog } from "./components";
+import { useState, useEffect, useCallback, useRef } from "react";
+import { Notification, CreateBlog, Toggle, Blogs } from "./components";
 import blogService from "./services/blogs";
 import loginService from "./services/login";
 
-const INIT_BLOG = { title: "", author: "", url: "" };
 const App = () => {
+  const toggleRef = useRef();
   const [blogs, setBlogs] = useState([]);
   const [user, setUser] = useState(null);
   const [userInfo, setUserInfo] = useState({ username: "", password: "" });
-  const [newBlog, setNewBlog] = useState(INIT_BLOG);
   const [notification, setNotification] = useState({
     type: "success",
     message: null,
@@ -65,20 +64,23 @@ const App = () => {
     window.localStorage.removeItem("loggedBlogsappUser");
   };
 
-  const handleCreateBlog = async (event) => {
-    event.preventDefault();
+  const onCreateBlog = useCallback(async ({ data }) => {
     try {
-      const res = await blogService.createBlog(newBlog);
+      const res = await blogService.createBlog(data);
       handleNotification({
         type: "success",
         message: `a new blog ${res.title} by ${res.author} added`,
       });
       await fetchBlogs();
-      setNewBlog(INIT_BLOG);
     } catch (error) {
       handleNotification({ type: "error", message: error.message });
     }
-  };
+  }, []);
+
+  const toggleVisibility = useCallback(
+    () => toggleRef.current?.onToggleVisibility(),
+    []
+  );
 
   const loginForm = () => {
     return (
@@ -110,50 +112,6 @@ const App = () => {
     );
   };
 
-  const createBlogForm = () => {
-    return (
-      <div>
-        <h3>Create new blog</h3>
-        <form onSubmit={handleCreateBlog}>
-          <div>
-            title
-            <input
-              type="text"
-              value={newBlog.title}
-              name="title"
-              onChange={({ target }) =>
-                setNewBlog((prev) => ({ ...prev, title: target.value }))
-              }
-            />
-          </div>
-          <div>
-            author:
-            <input
-              type="text"
-              value={newBlog.author}
-              name="author"
-              onChange={({ target }) =>
-                setNewBlog((prev) => ({ ...prev, author: target.value }))
-              }
-            />
-          </div>
-          <div>
-            url:
-            <input
-              type="text"
-              value={newBlog.url}
-              name="url"
-              onChange={({ target }) =>
-                setNewBlog((prev) => ({ ...prev, url: target.value }))
-              }
-            />
-          </div>
-          <button type="submit">create</button>
-        </form>
-      </div>
-    );
-  };
-
   return (
     <div>
       <Notification {...notification} />
@@ -168,10 +126,15 @@ const App = () => {
               logout
             </button>
           </p>
-          {createBlogForm()}
-          {blogs.map((blog) => (
-            <Blog key={blog.id} blog={blog} />
-          ))}
+
+          <Toggle ref={toggleRef} label={"create new note"}>
+            <CreateBlog
+              onCreateBlog={onCreateBlog}
+              onHideForm={toggleVisibility}
+            />
+          </Toggle>
+
+          <Blogs style={{ marginTop: 8 }} data={blogs} />
         </div>
       )}
     </div>

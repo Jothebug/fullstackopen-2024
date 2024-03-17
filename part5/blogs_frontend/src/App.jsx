@@ -1,18 +1,23 @@
 import { useState, useEffect, useCallback, useRef } from "react";
-import { Notification, CreateBlog, Toggle, Blogs } from "./components";
+import {
+  Notification,
+  CreateBlog,
+  Toggle,
+  Blogs,
+  Authentication,
+} from "./components";
 import blogService from "./services/blogs";
 import loginService from "./services/login";
+import { isEmpty } from "lodash";
 
 const App = () => {
   const toggleRef = useRef();
   const [blogs, setBlogs] = useState([]);
-  const [user, setUser] = useState(null);
-  const [userInfo, setUserInfo] = useState({ username: "", password: "" });
+  const [user, setUser] = useState({});
   const [notification, setNotification] = useState({
     type: "success",
     message: null,
   });
-  const { username, password } = userInfo;
 
   const handleNotification = (data = {}) => {
     setNotification(data);
@@ -23,7 +28,8 @@ const App = () => {
 
   const fetchBlogs = async () => {
     try {
-      const { data } = await blogService.getAll();
+      const { data = [] } = await blogService.getAll();
+      data.sort((a, b) => b.likes - a.likes);
       setBlogs(data);
     } catch (error) {
       handleNotification({ type: "error", message: error.message });
@@ -43,24 +49,22 @@ const App = () => {
     }
   }, []);
 
-  const handleLogin = async (event) => {
-    event.preventDefault();
+  const onLogin = async ({ data }) => {
     try {
-      const res = await loginService.login(userInfo);
+      const res = await loginService.login(data);
       window.localStorage.setItem(
         "loggedBlogsappUser",
         JSON.stringify(res.data)
       );
       blogService.setToken(res.data.token);
       setUser(res.data || {});
-      setUserInfo({ username: "", password: "" });
     } catch (error) {
       handleNotification({ type: "error", message: error.message });
     }
   };
 
-  const handleLogout = () => {
-    setUser(null);
+  const onLogout = () => {
+    setUser({});
     window.localStorage.removeItem("loggedBlogsappUser");
   };
 
@@ -77,65 +81,43 @@ const App = () => {
     }
   }, []);
 
+  const onLikeBlog = useCallback(async ({ blog }) => {
+    try {
+      await blogService.updateBlog({ id: blog.id, data: blog });
+      await fetchBlogs();
+    } catch (error) {
+      handleNotification({ type: "error", message: error.message });
+    }
+  }, []);
+
   const toggleVisibility = useCallback(
     () => toggleRef.current?.onToggleVisibility(),
     []
   );
 
-  const loginForm = () => {
-    return (
-      <form onSubmit={handleLogin}>
-        <div>
-          username
-          <input
-            type="text"
-            value={username}
-            name="Username"
-            onChange={({ target }) =>
-              setUserInfo((prev) => ({ ...prev, username: target.value }))
-            }
-          />
-        </div>
-        <div>
-          password
-          <input
-            name="Password"
-            type="password"
-            value={password}
-            onChange={({ target }) =>
-              setUserInfo((prev) => ({ ...prev, password: target.value }))
-            }
-          />
-        </div>
-        <button type="submit">login</button>
-      </form>
-    );
-  };
-
   return (
     <div>
       <Notification {...notification} />
-      <h2>{user === null ? "Log in to application" : "Blogs"}</h2>
-      {user === null ? (
-        loginForm()
-      ) : (
-        <div>
-          <p>
-            {user.name} logged in{" "}
-            <button type="button" onClick={handleLogout}>
-              logout
-            </button>
-          </p>
-
+      <Authentication
+        user={user}
+        onLogout={onLogout}
+        onLogin={onLogin}
+        style={{ marginBottom: 8 }}
+      />
+      {!isEmpty(user) && (
+        <>
           <Toggle ref={toggleRef} label={"create new note"}>
             <CreateBlog
               onCreateBlog={onCreateBlog}
               onHideForm={toggleVisibility}
             />
           </Toggle>
-
-          <Blogs style={{ marginTop: 8 }} data={blogs} />
-        </div>
+          <Blogs
+            data={blogs}
+            style={{ marginTop: 8 }}
+            onLikeBlog={onLikeBlog}
+          />
+        </>
       )}
     </div>
   );

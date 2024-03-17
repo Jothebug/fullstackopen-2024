@@ -1,5 +1,4 @@
 import axios from "axios";
-const baseUrl = "/api/blogs";
 
 let token = null;
 
@@ -7,16 +6,23 @@ const setToken = (newToken) => {
   token = `Bearer ${newToken}`;
 };
 
+const instance = axios.create({
+  baseURL: "http://localhost:3003/api/",
+  headers: { Authorization: token },
+});
+
 const getAll = async () => {
-  return axios.get(baseUrl);
+  return await instance({ url: "blogs", method: "GET" });
 };
 
 const createBlog = async (newBlog) => {
-  const config = {
-    headers: { Authorization: token },
-  };
-  const res = await axios.post(baseUrl, newBlog, config);
+  const res = await instance({ url: "blogs", method: "POST", data: newBlog });
   return res.data;
 };
 
-export default { getAll, createBlog, setToken };
+const updateBlog = async ({ id, data }) => {
+  const res = await instance({ url: `blogs/${id}`, method: "PUT", data });
+  return res.data;
+};
+
+export default { getAll, createBlog, setToken, updateBlog };

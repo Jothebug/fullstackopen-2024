@@ -4,11 +4,14 @@ const INIT_BLOG = { title: "", author: "", url: "" };
 const CreateBlog = ({ onCreateBlog, onHideForm }) => {
   const [newBlog, setNewBlog] = useState(INIT_BLOG);
 
-  const handleCreate = useCallback((event) => {
-    event.preventDefault();
-    onCreateBlog?.({ data: newBlog });
-    setNewBlog(INIT_BLOG);
-  }, []);
+  const handleCreate = useCallback(
+    (event) => {
+      event.preventDefault();
+      onCreateBlog?.({ data: newBlog });
+      setNewBlog(INIT_BLOG);
+    },
+    [newBlog, onCreateBlog]
+  );
 
   return (
     <div>

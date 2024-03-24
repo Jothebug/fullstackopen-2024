@@ -26,7 +26,7 @@ const App = () => {
     }, 5000);
   };
 
-  const fetchBlogs = async () => {
+  const fetchBlogs = useCallback(async () => {
     try {
       const { data = [] } = await blogService.getAll();
       data.sort((a, b) => b.likes - a.likes);
@@ -34,11 +34,11 @@ const App = () => {
     } catch (error) {
       handleNotification({ type: "error", message: error.message });
     }
-  };
+  }, []);
 
   useEffect(() => {
     fetchBlogs();
-  }, []);
+  }, [fetchBlogs]);
 
   useEffect(() => {
     const loggedUserJSON = window.localStorage.getItem("loggedBlogsappUser");
@@ -68,27 +68,33 @@ const App = () => {
     window.localStorage.removeItem("loggedBlogsappUser");
   };
 
-  const onCreateBlog = useCallback(async ({ data }) => {
-    try {
-      const res = await blogService.createBlog(data);
-      handleNotification({
-        type: "success",
-        message: `a new blog ${res.title} by ${res.author} added`,
-      });
-      await fetchBlogs();
-    } catch (error) {
-      handleNotification({ type: "error", message: error.message });
-    }
-  }, []);
+  const onCreateBlog = useCallback(
+    async ({ data }) => {
+      try {
+        const res = await blogService.createBlog(data);
+        handleNotification({
+          type: "success",
+          message: `a new blog ${res.title} by ${res.author} added`,
+        });
+        await fetchBlogs();
+      } catch (error) {
+        handleNotification({ type: "error", message: error.message });
+      }
+    },
+    [fetchBlogs]
+  );
 
-  const onLikeBlog = useCallback(async ({ blog }) => {
-    try {
-      await blogService.updateBlog({ id: blog.id, data: blog });
-      await fetchBlogs();
-    } catch (error) {
-      handleNotification({ type: "error", message: error.message });
-    }
-  }, []);
+  const onLikeBlog = useCallback(
+    async ({ blog }) => {
+      try {
+        await blogService.updateBlog({ id: blog.id, data: blog });
+        await fetchBlogs();
+      } catch (error) {
+        handleNotification({ type: "error", message: error.message });
+      }
+    },
+    [fetchBlogs]
+  );
 
   const toggleVisibility = useCallback(
     () => toggleRef.current?.onToggleVisibility(),

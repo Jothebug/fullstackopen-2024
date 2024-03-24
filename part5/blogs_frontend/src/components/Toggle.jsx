@@ -21,7 +21,9 @@ const Toggle = forwardRef(({ children, label }, ref) => {
     return { hideWhenVisible, shownWhenVisible };
   }, [isVisible]);
 
-  useImperativeHandle(ref, () => ({ onToggleVisibility }), []);
+  useImperativeHandle(ref, () => ({ onToggleVisibility }), [
+    onToggleVisibility,
+  ]);
 
   return (
     <div>
@@ -33,4 +35,5 @@ const Toggle = forwardRef(({ children, label }, ref) => {
   );
 });
 
+Toggle.displayName = "Toggle";
 export default memo(Toggle);

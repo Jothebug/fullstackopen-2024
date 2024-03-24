@@ -13,7 +13,7 @@ const Blog = ({ item, onLikeBlog }) => {
       onLikeBlog?.({ blog });
       return newLike;
     });
-  }, []);
+  }, [item, onLikeBlog]);
 
   return (
     <div

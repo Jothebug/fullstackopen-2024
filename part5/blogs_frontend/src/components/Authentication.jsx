@@ -1,14 +1,25 @@
 import { memo, useCallback, useMemo, useState } from "react";
 import { isEmpty } from "lodash";
+import PropTypes from "prop-types";
 
 const Authentication = ({ user = {}, onLogin, onLogout, style }) => {
   const [userInfo, setUserInfo] = useState({ username: "", password: "" });
 
-  const handleLogin = useCallback((event) => {
-    event.preventDefault();
-    onLogin?.({ data: userInfo });
-    setUserInfo({ username: "", password: "" });
-  }, []);
+  Authentication.prototype = {
+    user: PropTypes.object.isRequired,
+    onLogin: PropTypes.func.isRequired,
+    onLogout: PropTypes.func.isRequired,
+    style: PropTypes.object,
+  };
+
+  const handleLogin = useCallback(
+    (event) => {
+      event.preventDefault();
+      onLogin?.({ data: userInfo });
+      setUserInfo({ username: "", password: "" });
+    },
+    [onLogin, userInfo]
+  );
 
   const { showLogin, showLogout } = useMemo(() => {
     const showLogin = { display: isEmpty(user) ? "" : "none" };

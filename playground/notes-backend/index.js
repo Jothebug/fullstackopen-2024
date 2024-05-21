@@ -1,3 +1,4 @@
+require("dotenv").config();
 const express = require("express");
 const app = express();
 const cors = require("cors");
@@ -5,6 +6,21 @@ const cors = require("cors");
 app.use(express.json());
 app.use(cors());
 app.use(express.static("dist"));
+
+const requestLogger = (request, response, next) => {
+  console.log("Method:", request.method);
+  console.log("Path:  ", request.path);
+  console.log("Body:  ", request.body);
+  console.log("---");
+  next();
+};
+
+const unknownEndpoint = (request, response) => {
+  response.status(404).send({ error: "unknown endpoint" });
+};
+
+app.use(requestLogger);
+app.use(unknownEndpoint);
 
 let notes = [
   {
@@ -25,7 +41,7 @@ let notes = [
 ];
 
 app.get("/api/notes", (request, response) => {
-  response.json(notes);
+  response.status(200).json(notes);
 });
 
 app.get("/api/notes/:id", (request, response) => {
@@ -33,7 +49,7 @@ app.get("/api/notes/:id", (request, response) => {
   const note = notes.find((note) => note.id === id);
 
   if (note) {
-    response.json(note);
+    response.status(200).json(note);
   } else {
     // https://stackoverflow.com/questions/14154337/how-to-send-a-custom-http-status-message-in-node-express/36507614#36507614
     response.statusMessage = "Current id does not find";
@@ -62,7 +78,7 @@ app.post("/api/notes", (request, response) => {
   };
 
   notes = notes.concat(note);
-  response.json(note);
+  response.status(201).json(note);
 });
 
 app.delete("/api/notes/:id", (request, response) => {
@@ -87,21 +103,6 @@ app.put("/api/notes/:id", (request, response) => {
     response.status(404).end();
   }
 });
-
-const requestLogger = (request, response, next) => {
-  console.log("Method:", request.method);
-  console.log("Path:  ", request.path);
-  console.log("Body:  ", request.body);
-  console.log("---");
-  next();
-};
-
-const unknownEndpoint = (request, response) => {
-  response.status(404).send({ error: "unknown endpoint" });
-};
-
-app.use(requestLogger);
-app.use(unknownEndpoint);
 
 const PORT = process.env.PORT || 3001;
 app.listen(PORT, () => {

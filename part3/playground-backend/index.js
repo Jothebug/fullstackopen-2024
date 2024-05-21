@@ -71,6 +71,22 @@ app.delete("/api/notes/:id", (request, response) => {
   response.status(204).end();
 });
 
+app.put("/api/notes/:id", (request, response) => {
+  const body = request.body;
+  if (body && body.id) {
+    notes = notes.map((item) => {
+      if (item.id === Number(body.id)) {
+        return body;
+      } else {
+        return item;
+      }
+    });
+    response.status(200).json(body);
+  } else {
+    response.status(404).end();
+  }
+});
+
 const requestLogger = (request, response, next) => {
   console.log("Method:", request.method);
   console.log("Path:  ", request.path);

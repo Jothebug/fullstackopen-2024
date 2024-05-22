@@ -5,3 +5,8 @@ npm create vite@latest part1 -- --template react
 # stop warning
 
 "react/prop-types": 0,
+
+# Running tests one by one
+
+npm test -- --test-only
+npm test -- tests/note_api.test.js

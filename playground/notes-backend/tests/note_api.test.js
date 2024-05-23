@@ -8,7 +8,7 @@ const app = require("../app");
 const api = supertest(app);
 const Note = require("../models/note");
 
-describe("", () => {
+describe("when there is initially some notes saved", () => {
   beforeEach(async () => {
     await Note.deleteMany({});
     await Note.insertMany(helper.initialNotes);

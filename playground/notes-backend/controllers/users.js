@@ -5,7 +5,11 @@ const User = require("../models/user");
 
 usersRouter.get("/", async (_, response, next) => {
   try {
-    const users = await User.find({});
+    const users = await User.find({}).populate("notes", {
+      content: 1,
+      important: 1,
+      id: 1,
+    });
     response.status(200).json(users);
   } catch (error) {
     next(error);
@@ -33,7 +37,6 @@ usersRouter.post("/", async (request, response, next) => {
   try {
     const passwordHash = await bcrypt.hash(password, saltRound);
     const user = await new User({ name, username, passwordHash }).save();
-    console.log("user", user);
     response.status(201).json(user);
   } catch (error) {
     next(error);

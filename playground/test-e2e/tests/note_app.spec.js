@@ -6,12 +6,10 @@ describe("Note app", () => {
     await request.post("http:localhost:3001/api/testing/reset");
     await request.post("http://localhost:3001/api/users", {
       data: {
-        name: "admin",
         username: "admin",
-        password: "123456a@!",
+        password: "123456a@",
       },
     });
-
     await page.goto("http://localhost:5173");
   });
 
@@ -25,9 +23,20 @@ describe("Note app", () => {
     ).toBeVisible();
   });
 
-  test("user can log in", async ({ page }) => {
+  test("user can login with correct credentials", async ({ page }) => {
     await loginWith(page, "admin", "123456a@");
     await expect(page.getByText("admin logged in")).toBeVisible();
+  });
+
+  test("login fails with wrong password", async ({ page }) => {
+    await loginWith(page, "admin", "123456");
+
+    const errorDiv = await page.locator(".error");
+    await expect(errorDiv).toContainText("Request failed with status code 401");
+    await expect(errorDiv).toHaveCSS("border-style", "solid");
+    await expect(errorDiv).toHaveCSS("color", "rgb(255, 0, 0)");
+
+    await expect(page.getByText("admin logged in")).not.toBeVisible();
   });
 
   describe("when logged in", () => {
@@ -36,36 +45,24 @@ describe("Note app", () => {
     });
 
     test("a new note can be created", async ({ page }) => {
-      await createNote(page, "test created note", true);
-      await expect(page.getByText("test created note")).toBeVisible();
+      await createNote(page, "a note created by playwright123", true);
+      await expect(
+        page.getByText("a note created by playwright123")
+      ).toBeVisible();
+    });
+
+    describe("and a note exists", () => {
+      beforeEach(async ({ page }) => {
+        await createNote(page, "first note test12345678", true);
+      });
+
+      test("importance can be changed", async ({ page }) => {
+        const noteElement = await page.getByText("first note test12345678");
+        await noteElement
+          .getByRole("button", { name: "make not important" })
+          .click();
+        await expect(noteElement.getByText("make important")).toBeVisible();
+      });
     });
   });
-
-  describe("and a note exists", () => {
-    beforeEach(async ({ page }) => {
-      await Promise.all([
-        loginWith(page, "admin", "123456a@"),
-        createNote(page, "testing note for important", true),
-      ]);
-      // await loginWith(page, "admin", "123456a@");
-      // await createNote(page, "testing note for important", true);
-    });
-
-    test("importance can be changed", async ({ page }) => {
-      await page.getByRole("button", { name: "make not important" }).click();
-
-      await expect(page.getByText("make important")).toBeVisible();
-    });
-  });
-
-  // test("login fails with wrong password", async ({ page }) => {
-  //   await loginWith(page, "admin", "123456");
-
-  //   const errorDiv = await page.locator(".error");
-  //   await expect(errorDiv).toContainText("Request failed with status code 401");
-  //   await expect(errorDiv).toHaveCSS("border-style", "solid");
-  //   await expect(errorDiv).toHaveCSS("color", "rgb(255, 0, 0)");
-
-  //   await expect(page.getByText("admin logged in")).not.toBeVisible();
-  // });
 });

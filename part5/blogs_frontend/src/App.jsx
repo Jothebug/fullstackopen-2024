@@ -41,20 +41,19 @@ const App = () => {
   }, [fetchBlogs]);
 
   useEffect(() => {
-    const loggedUserJSON = window.localStorage.getItem("loggedBlogsappUser");
-    if (loggedUserJSON) {
-      const user = JSON.parse(loggedUserJSON);
+    const userJson = window.localStorage.getItem("@user");
+    if (userJson) {
+      const user = JSON.parse(userJson);
       setUser(user);
-      blogService.setToken(user.token);
     }
   }, []);
 
   const onLogin = async ({ data }) => {
     try {
       const res = await loginService.login(data);
-      window.localStorage.setItem("loggedBlogsappUser", JSON.stringify(res));
-      blogService.setToken(data.token);
-      setUser(data || {});
+      localStorage.setItem("@user", JSON.stringify(res));
+      localStorage.setItem("@token", res.token);
+      setUser(res || {});
     } catch (error) {
       handleNotification({
         type: "error",
@@ -65,7 +64,8 @@ const App = () => {
 
   const onLogout = () => {
     setUser({});
-    window.localStorage.removeItem("loggedBlogsappUser");
+    localStorage.removeItem("@user");
+    localStorage.removeItem("@token");
   };
 
   const onCreateBlog = useCallback(
@@ -89,6 +89,10 @@ const App = () => {
     async ({ blog }) => {
       try {
         await blogService.updateBlog({ id: blog.id, data: blog });
+        handleNotification({
+          type: "success",
+          message: `${blog.title} by ${blog.author} removed`,
+        });
         await fetchBlogs();
       } catch (error) {
         handleNotification({ type: "error", message: error.message });

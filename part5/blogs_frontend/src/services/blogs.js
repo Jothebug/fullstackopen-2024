@@ -1,14 +1,8 @@
 import axios from "axios";
 
-let token = null;
-
-const setToken = (newToken) => {
-  token = `Bearer ${newToken}`;
-};
-
 const instance = axios.create({
   baseURL: "http://localhost:3003/api/",
-  headers: { Authorization: token },
+  headers: { Authorization: `Bearer ${localStorage.getItem("@token")}` },
 });
 
 const getAll = async () => {
@@ -29,4 +23,4 @@ const deleteBlog = async ({ id }) => {
   return await instance({ url: `blogs/${id}`, method: "DELETE" });
 };
 
-export default { getAll, createBlog, setToken, updateBlog, deleteBlog };
+export default { getAll, createBlog, updateBlog, deleteBlog };

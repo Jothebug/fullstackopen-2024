@@ -1,12 +1,12 @@
 import { memo, useCallback, useMemo, useState } from "react";
 
-const Blog = ({ item, onLikeBlog }) => {
+const Blog = ({ item, onLikeBlog, onRemoveBlog }) => {
   const [isVisible, setIsVisible] = useState(false);
   const [like, setLike] = useState(item.likes || 0);
-  const titleButton = useMemo(() => (isVisible ? "hide" : "show"), [isVisible]);
+  const titleButton = useMemo(() => (isVisible ? "hide" : "view"), [isVisible]);
   const onToggle = useCallback(() => setIsVisible((prev) => !prev), []);
 
-  const onClick = useCallback(() => {
+  const onLike = useCallback(() => {
     setLike((prev) => {
       const newLike = prev + 1;
       const blog = { ...item, likes: newLike };
@@ -14,6 +14,13 @@ const Blog = ({ item, onLikeBlog }) => {
       return newLike;
     });
   }, [item, onLikeBlog]);
+
+  const onRemove = useCallback(() => {
+    if (window.confirm(`Remove blog ${item.title}! by ${item.author}`)) {
+      console.log("onRemoveBlog");
+      onRemoveBlog?.({ blog: item });
+    }
+  }, [item, onRemoveBlog]);
 
   return (
     <div
@@ -29,9 +36,20 @@ const Blog = ({ item, onLikeBlog }) => {
         <>
           <div> url: {item.url}</div>
           <div>
-            likes: {like} <button onClick={onClick}>like</button>
+            likes: {like} <button onClick={onLike}>like</button>
           </div>
           <div>author: {item.author}</div>
+          <button
+            onClick={onRemove}
+            style={{
+              background: "#4185F6",
+              borderRadius: 5,
+              borderWidth: 0,
+              height: 22,
+            }}
+          >
+            <text style={{ color: "white" }}>remove</text>
+          </button>
         </>
       )}
     </div>

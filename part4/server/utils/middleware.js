@@ -18,14 +18,6 @@ const tokenExtractor = (request, _, next) => {
   next();
 };
 
-const userExtractor = async (request, _, next) => {
-  const decodedToken = jwt.verify(request.token, process.env.SECRET);
-  if (decodedToken.id) {
-    request.user = await User.findById(decodedToken.id);
-  }
-  next();
-};
-
 const unknownEndpoint = (_, res) => {
   res.status(404).send({ error: "Unknown endpoint" });
 };
@@ -65,5 +57,4 @@ module.exports = {
   unknownEndpoint,
   errorHandler,
   tokenExtractor,
-  userExtractor,
 };

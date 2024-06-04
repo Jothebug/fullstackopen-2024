@@ -8,6 +8,7 @@ app.use(cors());
 const config = require("./utils/config");
 const logger = require("./utils/logger");
 const middleware = require("./utils/middleware");
+
 app.use(middleware.requestLogger);
 app.use(middleware.tokenExtractor);
 

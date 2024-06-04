@@ -52,14 +52,14 @@ const App = () => {
   const onLogin = async ({ data }) => {
     try {
       const res = await loginService.login(data);
-      window.localStorage.setItem(
-        "loggedBlogsappUser",
-        JSON.stringify(res.data)
-      );
-      blogService.setToken(res.data.token);
-      setUser(res.data || {});
+      window.localStorage.setItem("loggedBlogsappUser", JSON.stringify(res));
+      blogService.setToken(data.token);
+      setUser(data || {});
     } catch (error) {
-      handleNotification({ type: "error", message: error.message });
+      handleNotification({
+        type: "error",
+        message: error.response.data.error,
+      });
     }
   };
 
@@ -78,6 +78,7 @@ const App = () => {
         });
         await fetchBlogs();
       } catch (error) {
+        console.log("error", error);
         handleNotification({ type: "error", message: error.message });
       }
     },
@@ -91,6 +92,21 @@ const App = () => {
         await fetchBlogs();
       } catch (error) {
         handleNotification({ type: "error", message: error.message });
+      }
+    },
+    [fetchBlogs]
+  );
+
+  const onRemoveBlog = useCallback(
+    async ({ blog }) => {
+      try {
+        await blogService.deleteBlog({ id: blog.id });
+        await fetchBlogs();
+      } catch (error) {
+        handleNotification({
+          type: "error",
+          message: error.response.data.error,
+        });
       }
     },
     [fetchBlogs]
@@ -122,6 +138,7 @@ const App = () => {
             data={blogs}
             style={{ marginTop: 8 }}
             onLikeBlog={onLikeBlog}
+            onRemoveBlog={onRemoveBlog}
           />
         </>
       )}

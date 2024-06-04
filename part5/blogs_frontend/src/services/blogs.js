@@ -25,4 +25,8 @@ const updateBlog = async ({ id, data }) => {
   return res.data;
 };
 
-export default { getAll, createBlog, setToken, updateBlog };
+const deleteBlog = async ({ id }) => {
+  return await instance({ url: `blogs/${id}`, method: "DELETE" });
+};
+
+export default { getAll, createBlog, setToken, updateBlog, deleteBlog };

@@ -12,7 +12,6 @@ test("renders content", () => {
   };
 
   const { container } = render(<Blog item={blog} />);
-
   const div = container.querySelector(".blog");
   expect(div).toHaveTextContent("test title");
   expect(div).toHaveTextContent("Jo");
@@ -20,14 +19,21 @@ test("renders content", () => {
   expect(div).not.toHaveProperty("like");
 });
 
-// test("click the View button", () => {
-//   const blog = {
-//     title: "test title",
-//     author: "Jo",
-//     url: "http://test",
-//     like: 1,
-//   };
+test("click the View button", async () => {
+  const blog = {
+    title: "test title 1",
+    author: "Jo",
+    url: "http://test",
+    like: 1,
+  };
 
-//   const mockHandler = vi.fn();
-//   render(<Blog item={blog} />);
-// });
+  const { container } = render(<Blog item={blog} />);
+
+  const user = userEvent.setup();
+  const button = screen.getByText("view");
+  await user.click(button);
+
+  const element = container.querySelector(".blog");
+  expect(element).toHaveTextContent("http://test");
+  expect(element).toHaveTextContent(1);
+});

@@ -29,6 +29,7 @@ const Blog = ({ item, onLikeBlog, onRemoveBlog }) => {
     >
       <div>
         {item.title}
+        <div>author: {item.author}</div>
         <button type="button" onClick={onToggle} style={{ marginLeft: 8 }}>
           {titleButton}
         </button>
@@ -39,7 +40,6 @@ const Blog = ({ item, onLikeBlog, onRemoveBlog }) => {
           <div>
             likes: {like} <button onClick={onLike}>like</button>
           </div>
-          <div>author: {item.author}</div>
           <button
             onClick={onRemove}
             style={{

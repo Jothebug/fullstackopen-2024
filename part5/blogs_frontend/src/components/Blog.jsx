@@ -24,6 +24,7 @@ const Blog = ({ item, onLikeBlog, onRemoveBlog }) => {
 
   return (
     <div
+      className="blog"
       style={{ border: "solid", borderWidth: 1, marginBottom: 8, padding: 8 }}
     >
       <div>

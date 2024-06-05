@@ -12,8 +12,6 @@ test("renders content", () => {
 
   render(<Blog item={blog} />);
 
-  const element = screen.getByText(
-    "Component testing is done with react-testing-lib"
-  );
+  const element = screen.getByText("test title");
   expect(element).toBeDefined();
 });

@@ -1,5 +1,5 @@
 /* eslint-disable no-undef */
-import { render, screen } from "@testing-library/react";
+import { fireEvent, render, screen } from "@testing-library/react";
 import userEvent from "@testing-library/user-event";
 import Blog from "./Blog";
 
@@ -36,4 +36,26 @@ test("click the View button", async () => {
   const element = container.querySelector(".blog");
   expect(element).toHaveTextContent("http://test");
   expect(element).toHaveTextContent(1);
+});
+
+test("click the Like button twice", async () => {
+  const blog = {
+    title: "test title blog",
+    author: "Jo",
+    url: "http://test",
+    like: 1,
+  };
+
+  const mockHandler = vi.fn();
+  render(<Blog item={blog} onLikeBlog={mockHandler} />);
+
+  const user = userEvent.setup();
+  const button = screen.getByText("view");
+  await user.click(button);
+
+  const likeButton = screen.getByTestId("like-button");
+  fireEvent.click(likeButton);
+  fireEvent.click(likeButton);
+
+  expect(mockHandler.mock.calls).toHaveLength(2);
 });

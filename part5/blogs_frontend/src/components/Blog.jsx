@@ -38,7 +38,10 @@ const Blog = ({ item, onLikeBlog, onRemoveBlog }) => {
         <>
           <div> url: {item.url}</div>
           <div>
-            likes: {like} <button onClick={onLike}>like</button>
+            likes: {like}{" "}
+            <button data-testid="like-button" onClick={onLike}>
+              like
+            </button>
           </div>
           <button
             onClick={onRemove}

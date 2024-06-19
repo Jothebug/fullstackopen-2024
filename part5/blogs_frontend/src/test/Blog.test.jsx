@@ -1,7 +1,7 @@
 /* eslint-disable no-undef */
 import { fireEvent, render, screen } from "@testing-library/react";
 import userEvent from "@testing-library/user-event";
-import Blog from "./Blog";
+import Blog from "../components/Blog";
 
 test("renders content", () => {
   const blog = {

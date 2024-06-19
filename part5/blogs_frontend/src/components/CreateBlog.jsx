@@ -23,6 +23,7 @@ const CreateBlog = ({ onCreateBlog, onHideForm }) => {
             type="text"
             value={newBlog.title}
             name="title"
+            placeholder="title"
             onChange={({ target }) =>
               setNewBlog((prev) => ({ ...prev, title: target.value }))
             }
@@ -34,6 +35,7 @@ const CreateBlog = ({ onCreateBlog, onHideForm }) => {
             type="text"
             value={newBlog.author}
             name="author"
+            placeholder="author"
             onChange={({ target }) =>
               setNewBlog((prev) => ({ ...prev, author: target.value }))
             }
@@ -45,6 +47,7 @@ const CreateBlog = ({ onCreateBlog, onHideForm }) => {
             type="text"
             value={newBlog.url}
             name="url"
+            placeholder="url"
             onChange={({ target }) =>
               setNewBlog((prev) => ({ ...prev, url: target.value }))
             }

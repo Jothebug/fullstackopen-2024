@@ -36,6 +36,7 @@ const Authentication = ({ user = {}, onLogin, onLogout, style }) => {
           <div>
             username{" "}
             <input
+              data-testid="username"
               type="text"
               value={userInfo.username}
               name="Username"
@@ -47,6 +48,7 @@ const Authentication = ({ user = {}, onLogin, onLogout, style }) => {
           <div>
             password{" "}
             <input
+              data-testid="password"
               name="Password"
               type="password"
               value={userInfo.password}

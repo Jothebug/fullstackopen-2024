@@ -1,4 +1,4 @@
-import { memo, useCallback, useMemo, useState } from "react";
+import { memo, useCallback, useState } from "react";
 
 const INIT_BLOG = { title: "", author: "", url: "" };
 const CreateBlog = ({ onCreateBlog, onHideForm }) => {
@@ -20,6 +20,7 @@ const CreateBlog = ({ onCreateBlog, onHideForm }) => {
         <div>
           title
           <input
+            data-testid="title"
             type="text"
             value={newBlog.title}
             name="title"
@@ -32,6 +33,7 @@ const CreateBlog = ({ onCreateBlog, onHideForm }) => {
         <div style={{ marginTop: 8, marginBottom: 8 }}>
           author:
           <input
+            data-testid="author"
             type="text"
             value={newBlog.author}
             name="author"
@@ -44,6 +46,7 @@ const CreateBlog = ({ onCreateBlog, onHideForm }) => {
         <div style={{ marginBottom: 8 }}>
           url:
           <input
+            data-testid="url"
             type="text"
             value={newBlog.url}
             name="url"

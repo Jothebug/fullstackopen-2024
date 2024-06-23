@@ -14,15 +14,13 @@ const App = () => {
   const toggleRef = useRef();
   const [blogs, setBlogs] = useState([]);
   const [user, setUser] = useState({});
-  const [notification, setNotification] = useState({
-    type: "success",
-    message: null,
-  });
+  const [notification, setNotification] = useState({ message: null });
 
   const handleNotification = (data = {}) => {
     setNotification(data);
+
     setTimeout(() => {
-      setNotification({ type: "success", message: null });
+      setNotification({ message: null });
     }, 5000);
   };
 

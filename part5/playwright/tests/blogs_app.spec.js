@@ -3,7 +3,7 @@ const { loginWith, createBlog } = require("./helpers");
 
 describe("Blog app", () => {
   beforeEach(async ({ page, request }) => {
-    await request.post("http:localhost:3001/api/testing/reset");
+    await request.post("http:localhost:5173/api/testing/reset");
     await request.post("http://localhost:3003/api/login", {
       data: {
         username: "HaYen",
@@ -26,7 +26,13 @@ describe("Blog app", () => {
     });
 
     test("fails with wrong credentials", async ({ page }) => {
-      await loginWith(page, "HaYen", "123456a@");
+      await loginWith(page, "HaYen", "123456");
+
+      const errorDiv = await page.locator(".error");
+
+      await expect(errorDiv).toContainText("invalid username or password");
+      await expect(errorDiv).toHaveCSS("border-style", "solid");
+      await expect(errorDiv).toHaveCSS("color", "rgb(255, 0, 0)");
       await expect(page.getByText("jo logged in")).not.toBeVisible();
     });
   });

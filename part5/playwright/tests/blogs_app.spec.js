@@ -57,5 +57,22 @@ describe("Blog app", () => {
       );
       await expect(successDiv).toHaveCSS("color", "rgb(0, 128, 0)");
     });
+
+    test("a blog can be liked", async ({ page }) => {
+      const blog = {
+        title: "title blog test",
+        author: "author test",
+        url: "urltest.com",
+      };
+      await createBlog({ page, ...blog });
+
+      await page.getByTestId("view").click();
+      await page.getByTestId("like-button").click();
+
+      const successDiv = await page.locator(".success");
+      await expect(successDiv).toContainText(
+        `${blog.title} by ${blog.author} liked`
+      );
+    });
   });
 });

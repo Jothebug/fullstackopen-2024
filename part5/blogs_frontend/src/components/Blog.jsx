@@ -29,7 +29,12 @@ const Blog = ({ item, onLikeBlog, onRemoveBlog }) => {
       <div>
         {item.title}
         <div>author: {item.author}</div>
-        <button type="button" onClick={onToggle} style={{ marginLeft: 8 }}>
+        <button
+          type="button"
+          data-testid={titleButton}
+          onClick={onToggle}
+          style={{ marginLeft: 8 }}
+        >
           {titleButton}
         </button>
       </div>

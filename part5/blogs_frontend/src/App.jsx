@@ -44,10 +44,6 @@ const App = () => {
       const user = JSON.parse(userJson);
       setUser(user);
     }
-    const token = window.localStorage.getItem("@token");
-    if (token) {
-      blogService.setToken(token);
-    }
   }, []);
 
   const onLogin = async ({ data }) => {
@@ -56,7 +52,6 @@ const App = () => {
       window.localStorage.setItem("@token", res.token);
       window.localStorage.setItem("@user", JSON.stringify(res));
       setUser(res || {});
-      blogService.setToken(res.token);
     } catch (error) {
       handleNotification({
         type: "error",
@@ -67,7 +62,6 @@ const App = () => {
 
   const onLogout = () => {
     setUser({});
-    blogService.setToken(null);
     window.localStorage.removeItem("@user");
     window.localStorage.removeItem("@token");
   };

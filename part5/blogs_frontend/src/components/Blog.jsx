@@ -2,7 +2,7 @@ import { memo, useCallback, useMemo, useState } from "react";
 
 const Blog = ({ item, onLikeBlog, onRemoveBlog }) => {
   const [isVisible, setIsVisible] = useState(false);
-  const [like, setLike] = useState(item.likes || 0);
+  const [like, setLike] = useState(item.likes);
   const titleButton = useMemo(() => (isVisible ? "hide" : "view"), [isVisible]);
   const onToggle = useCallback(() => setIsVisible((prev) => !prev), []);
 
@@ -17,7 +17,6 @@ const Blog = ({ item, onLikeBlog, onRemoveBlog }) => {
 
   const onRemove = useCallback(() => {
     if (window.confirm(`Remove blog ${item.title}! by ${item.author}`)) {
-      console.log("onRemoveBlog");
       onRemoveBlog?.({ blog: item });
     }
   }, [item, onRemoveBlog]);

@@ -44,14 +44,19 @@ const App = () => {
       const user = JSON.parse(userJson);
       setUser(user);
     }
+    const token = window.localStorage.getItem("@token");
+    if (token) {
+      blogService.setToken(token);
+    }
   }, []);
 
   const onLogin = async ({ data }) => {
     try {
       const res = await loginService.login(data);
-      localStorage.setItem("@user", JSON.stringify(res));
-      localStorage.setItem("@token", res.token);
+      window.localStorage.setItem("@token", res.token);
+      window.localStorage.setItem("@user", JSON.stringify(res));
       setUser(res || {});
+      blogService.setToken(res.token);
     } catch (error) {
       handleNotification({
         type: "error",
@@ -62,8 +67,9 @@ const App = () => {
 
   const onLogout = () => {
     setUser({});
-    localStorage.removeItem("@user");
-    localStorage.removeItem("@token");
+    blogService.setToken(null);
+    window.localStorage.removeItem("@user");
+    window.localStorage.removeItem("@token");
   };
 
   const onCreateBlog = useCallback(
@@ -89,7 +95,7 @@ const App = () => {
         await blogService.updateBlog({ id: blog.id, data: blog });
         handleNotification({
           type: "success",
-          message: `${blog.title} by ${blog.author} removed`,
+          message: `${blog.title} by ${blog.author} liked`,
         });
         await fetchBlogs();
       } catch (error) {
@@ -100,9 +106,13 @@ const App = () => {
   );
 
   const onRemoveBlog = useCallback(
-    async ({ blog }) => {
+    async ({ blog = {} }) => {
       try {
         await blogService.deleteBlog({ id: blog.id });
+        handleNotification({
+          type: "success",
+          message: `${blog.title} by ${blog.author} removed`,
+        });
         await fetchBlogs();
       } catch (error) {
         handleNotification({

@@ -82,14 +82,36 @@ describe("Blog app", () => {
       );
     });
 
-    test("only user who creates blog can see the remove", async ({ page }) => {
+    test("who added the blog can delete the blog", async ({ page }) => {
+      const blog = {
+        title: "test title ex:5.21",
+        author: "test author ex:5.21",
+        url: "testurl.com",
+      };
+      await createBlog({ page, ...blog });
+      await page.getByTestId("view-button").click();
+      await page.getByTestId("remove-button").click();
+      page.on("dialog", async (dialog) => {
+        expect(dialog.message()).toEqual(
+          `Remove blog ${blog.title}! by ${blog.author}`
+        );
+        await dialog.accept();
+      });
+
+      await expect(
+        page.getByText("test title ex:5.22 by test author ex:5.21")
+      ).not.toBeVisible();
+    });
+
+    test("only user who added the blog sees the blog's remove button", async ({
+      page,
+    }) => {
       await createBlog({
         page,
         title: "test title ex:5.22",
         author: "test author ex:5.22",
         url: "testurl.com",
       });
-
       await page.getByTestId("logout-button").click();
       await loginWith({ page, username: "hayen1", password: "123456a@" });
       await page.getByTestId("view-button").click();

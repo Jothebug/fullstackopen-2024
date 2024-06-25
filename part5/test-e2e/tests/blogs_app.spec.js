@@ -11,6 +11,13 @@ describe("Blog app", () => {
         password: "123456a@",
       },
     });
+    await request.post("http://localhost:3003/api/users", {
+      data: {
+        username: "hayen1",
+        name: "HaYen1",
+        password: "123456a@",
+      },
+    });
     await page.goto("http://localhost:5173");
   });
 
@@ -75,21 +82,18 @@ describe("Blog app", () => {
       );
     });
 
-    // test("ex:5.21", async ({ page }) => {});
+    test("only user who creates blog can see the remove", async ({ page }) => {
+      await createBlog({
+        page,
+        title: "test title ex:5.22",
+        author: "test author ex:5.22",
+        url: "testurl.com",
+      });
 
-    // test("only user who creates blog can see the remove", async ({ page }) => {
-    //   await createBlog({
-    //     page,
-    //     title: "test title ex:5.22",
-    //     author: "test author ex:5.22",
-    //     url: "testurl.com",
-    //   });
-
-    //   await page.getByTestId("logout-button").click();
-    //   await loginWith({ page, username: "hayen1", password: "123456a@" });
-
-    //   await page.getByTestId("view-button").click();
-    //   await expect(page.getByText("remove")).toBeVisible();
-    // });
+      await page.getByTestId("logout-button").click();
+      await loginWith({ page, username: "hayen1", password: "123456a@" });
+      await page.getByTestId("view-button").click();
+      await expect(page.getByText("remove")).not.toBeVisible();
+    });
   });
 });

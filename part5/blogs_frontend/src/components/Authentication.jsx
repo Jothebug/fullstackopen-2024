@@ -64,7 +64,9 @@ const Authentication = ({ user = {}, onLogin, onLogout, style }) => {
         <h2>Blogs</h2>
         <div>
           <p>{user.name} logged in</p>
-          <button onClick={onLogout}>logout</button>
+          <button onClick={onLogout} data-testid="logout-button">
+            logout
+          </button>
         </div>
       </div>
     </div>

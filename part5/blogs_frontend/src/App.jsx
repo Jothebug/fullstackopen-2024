@@ -142,6 +142,7 @@ const App = () => {
           </Toggle>
           <Blogs
             data={blogs}
+            user={user}
             style={{ marginTop: 8 }}
             onLikeBlog={onLikeBlog}
             onRemoveBlog={onRemoveBlog}

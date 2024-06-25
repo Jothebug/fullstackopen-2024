@@ -66,7 +66,7 @@ describe("Blog app", () => {
       };
       await createBlog({ page, ...blog });
 
-      await page.getByTestId("view").click();
+      await page.getByTestId("view-button").click();
       await page.getByTestId("like-button").click();
 
       const successDiv = await page.locator(".success");
@@ -74,5 +74,22 @@ describe("Blog app", () => {
         `${blog.title} by ${blog.author} liked`
       );
     });
+
+    // test("ex:5.21", async ({ page }) => {});
+
+    // test("only user who creates blog can see the remove", async ({ page }) => {
+    //   await createBlog({
+    //     page,
+    //     title: "test title ex:5.22",
+    //     author: "test author ex:5.22",
+    //     url: "testurl.com",
+    //   });
+
+    //   await page.getByTestId("logout-button").click();
+    //   await loginWith({ page, username: "hayen1", password: "123456a@" });
+
+    //   await page.getByTestId("view-button").click();
+    //   await expect(page.getByText("remove")).toBeVisible();
+    // });
   });
 });

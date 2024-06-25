@@ -1,5 +1,5 @@
 const { test, expect, beforeEach, describe } = require("@playwright/test");
-const { loginWith, createBlog } = require("./helpers");
+const { loginWith, createBlog, BLOGS } = require("./helpers");
 
 describe("Blog app", () => {
   beforeEach(async ({ page, request }) => {
@@ -56,6 +56,7 @@ describe("Blog app", () => {
         author: "author test",
         url: "urltest.com",
       };
+      await page.getByRole("button", { name: "create new note" }).click();
       await createBlog({ page, ...blog });
 
       const successDiv = await page.locator(".success");
@@ -71,6 +72,7 @@ describe("Blog app", () => {
         author: "author test",
         url: "urltest.com",
       };
+      await page.getByRole("button", { name: "create new note" }).click();
       await createBlog({ page, ...blog });
 
       await page.getByTestId("view-button").click();
@@ -88,7 +90,9 @@ describe("Blog app", () => {
         author: "test author ex:5.21",
         url: "testurl.com",
       };
+      await page.getByRole("button", { name: "create new note" }).click();
       await createBlog({ page, ...blog });
+
       await page.getByTestId("view-button").click();
       await page.getByTestId("remove-button").click();
       page.on("dialog", async (dialog) => {
@@ -97,7 +101,6 @@ describe("Blog app", () => {
         );
         await dialog.accept();
       });
-
       await expect(
         page.getByText("test title ex:5.22 by test author ex:5.21")
       ).not.toBeVisible();
@@ -106,6 +109,7 @@ describe("Blog app", () => {
     test("only user who added the blog sees the blog's remove button", async ({
       page,
     }) => {
+      await page.getByRole("button", { name: "create new note" }).click();
       await createBlog({
         page,
         title: "test title ex:5.22",
@@ -116,6 +120,20 @@ describe("Blog app", () => {
       await loginWith({ page, username: "hayen1", password: "123456a@" });
       await page.getByTestId("view-button").click();
       await expect(page.getByText("remove")).not.toBeVisible();
+    });
+  });
+
+  describe("Blogs ordered by number of likes", async () => {
+    beforeEach(async ({ page }) => {
+      await loginWith({ page, username: "hayen", password: "123456a@" });
+      await page.getByRole("button", { name: "create new note" }).click();
+      await BLOGS.forEach(async (blog) => await createBlog({ page, ...blog }));
+    });
+
+    test("Blogs ordered by number of likes", async ({ page }) => {
+      await expect(page.getByTestId("blog")).toContainText("test 2");
+      await expect(page.getByTestId("blog")).toContainText("test 1");
+      await expect(page.getByTestId("blog")).toContainText("test 3");
     });
   });
 });

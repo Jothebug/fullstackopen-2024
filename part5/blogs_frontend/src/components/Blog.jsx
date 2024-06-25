@@ -34,7 +34,7 @@ const Blog = ({ item = {}, user = {}, onLikeBlog, onRemoveBlog }) => {
   );
 
   return (
-    <div className="blog" style={blogStyle}>
+    <div data-testid="blog" className="blog" style={blogStyle}>
       <div style={hideWhenVisible}>
         {item.title} by {item.author}
         <button

@@ -5,11 +5,31 @@ const loginWith = async ({ page, username, password }) => {
 };
 
 const createBlog = async ({ page, title, author, url }) => {
-  await page.getByRole("button", { name: "create new note" }).click();
   await page.getByTestId("title").fill(title);
   await page.getByTestId("author").fill(author);
   await page.getByTestId("url").fill(url);
   await page.getByRole("button", { name: "create" }).click();
 };
 
-export { loginWith, createBlog };
+const BLOGS = [
+  {
+    title: "test 1",
+    author: "JoTheBug",
+    url: "test1.com",
+    likes: 5,
+  },
+  {
+    title: "test 2",
+    author: "JoTheBug",
+    url: "test2.com",
+    likes: 6,
+  },
+  {
+    title: "test 3",
+    author: "JoTheBug",
+    url: "test3.com",
+    likes: 2,
+  },
+];
+
+export { loginWith, createBlog, BLOGS };

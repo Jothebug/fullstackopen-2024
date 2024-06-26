@@ -1,5 +1,6 @@
 import { useDispatch, useSelector } from "react-redux";
 import { voteAnecdote } from "../reducers/anecdoteReducer";
+import { createNoti } from "../reducers/notificationReducer";
 
 const AnecdoteList = () => {
   const dispatch = useDispatch();
@@ -15,8 +16,9 @@ const AnecdoteList = () => {
     }
   });
 
-  const onVote = (id) => {
-    dispatch(voteAnecdote({ id }));
+  const onVote = (anecdote) => {
+    dispatch(voteAnecdote({ id: anecdote.id }));
+    dispatch(createNoti({ content: anecdote.content }));
   };
 
   if (anecdotes.length === 0) return null;
@@ -28,7 +30,7 @@ const AnecdoteList = () => {
           <div>{anecdote.content}</div>
           <div>
             has {anecdote.votes}
-            <button onClick={() => onVote(anecdote.id)}>vote</button>
+            <button onClick={() => onVote(anecdote)}>vote</button>
           </div>
         </div>
       ))}

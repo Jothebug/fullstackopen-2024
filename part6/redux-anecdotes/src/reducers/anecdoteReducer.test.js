@@ -1,5 +1,5 @@
 import deepFreeze from "deep-freeze";
-import reducer, { initialState } from "./anecdoteReducer";
+import anecdoteReducer, { initialState } from "./anecdoteReducer";
 
 describe("anecdote reducer", () => {
   test("vote is pressed", () => {
@@ -7,7 +7,7 @@ describe("anecdote reducer", () => {
     const action = { type: "VOTE", payload: { id: initialState[0].id } };
 
     deepFreeze(state);
-    const newState = reducer(state, action);
+    const newState = anecdoteReducer(state, action);
     expect(newState[0]).toEqual({
       content: initialState[0].content,
       id: initialState[0].id,
@@ -23,7 +23,7 @@ describe("anecdote reducer", () => {
     };
 
     deepFreeze(state);
-    const newState = reducer(state, action);
+    const newState = anecdoteReducer(state, action);
     const latestContent = newState[newState.length - 1]?.content;
     expect(latestContent).toEqual("My first line of code is not Hello World!");
   });

@@ -3,7 +3,17 @@ import { voteAnecdote } from "../reducers/anecdoteReducer";
 
 const AnecdoteList = () => {
   const dispatch = useDispatch();
-  const anecdotes = useSelector((state) => state);
+  const anecdotes = useSelector((state) => {
+    if (state.filter.type === "ALL") {
+      return state.anecdotes;
+    }
+    if (state.filter.type === "FILTER") {
+      const filteredAnecdotes = state.anecdotes.filter(({ content } = {}) =>
+        content.toLowerCase().includes(state.filter.payload.toLowerCase())
+      );
+      return filteredAnecdotes;
+    }
+  });
 
   const onVote = (id) => {
     dispatch(voteAnecdote(id));
@@ -13,7 +23,6 @@ const AnecdoteList = () => {
 
   return (
     <>
-      <h2>Anecdotes</h2>
       {anecdotes.map((anecdote = {}) => (
         <div key={anecdote.id}>
           <div>{anecdote.content}</div>

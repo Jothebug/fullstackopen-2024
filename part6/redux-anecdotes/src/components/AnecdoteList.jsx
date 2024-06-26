@@ -16,7 +16,7 @@ const AnecdoteList = () => {
   });
 
   const onVote = (id) => {
-    dispatch(voteAnecdote(id));
+    dispatch(voteAnecdote({ id }));
   };
 
   if (anecdotes.length === 0) return null;

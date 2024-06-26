@@ -9,7 +9,7 @@ const AnecdoteForm = () => {
     const content = event.target.note.value;
     event.target.note.value = "";
 
-    dispatch(creatNewAnecdote(content));
+    dispatch(creatNewAnecdote({ content }));
   };
 
   return (

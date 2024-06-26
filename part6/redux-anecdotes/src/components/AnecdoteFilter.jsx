@@ -6,7 +6,7 @@ const AnecdoteFilter = () => {
 
   const handleChange = (event) => {
     event.preventDefault();
-    dispatch(filter(event.target.value));
+    dispatch(filter({ search: event.target.value }));
   };
 
   return (

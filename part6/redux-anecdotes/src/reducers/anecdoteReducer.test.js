@@ -4,7 +4,10 @@ import anecdoteReducer, { initialState } from "./anecdoteReducer";
 describe("anecdote reducer", () => {
   test("vote is pressed", () => {
     const state = initialState;
-    const action = { type: "VOTE", payload: { id: initialState[0].id } };
+    const action = {
+      type: "anecdotes/voteAnecdote",
+      payload: { id: initialState[0].id },
+    };
 
     deepFreeze(state);
     const newState = anecdoteReducer(state, action);
@@ -18,7 +21,7 @@ describe("anecdote reducer", () => {
   test("create a new anecdote", () => {
     const state = initialState;
     const action = {
-      type: "CREATE",
+      type: "anecdotes/creatNewAnecdote",
       payload: { content: "My first line of code is not Hello World!" },
     };
 

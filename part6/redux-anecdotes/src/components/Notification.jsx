@@ -7,6 +7,7 @@ const Notification = () => {
     border: "solid",
     padding: 10,
     borderWidth: 1,
+    marginBottom: 20,
   };
 
   if (!notification) return null;

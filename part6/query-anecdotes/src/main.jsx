@@ -1,7 +1,7 @@
 import ReactDOM from "react-dom/client";
 import { QueryClient, QueryClientProvider } from "@tanstack/react-query";
 import App from "./App";
-import { NotificationProvider } from "./components/Notification";
+import { NotificationProvider } from "./context/Notifcation";
 
 const queryClient = new QueryClient();
 

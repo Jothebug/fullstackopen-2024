@@ -1,10 +1,7 @@
 import { useQuery } from "@tanstack/react-query";
-
-import AnecdoteForm from "./components/AnecdoteForm";
-import Notification from "./components/Notification";
-import AnecdoteList from "./components/AnecdoteList";
-
 import { getAnecdotes } from "./services/requests";
+
+import { Notification, AnecdoteForm, AnecdoteList } from "./components";
 
 const App = () => {
   const { isPending, isError, data, error, isLoading } = useQuery({

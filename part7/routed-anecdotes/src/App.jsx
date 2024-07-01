@@ -1,5 +1,5 @@
 import { useState } from "react";
-import { Routes, Route, Link, useMatch } from "react-router-dom";
+import { Routes, Route, Link, useMatch, useNavigate } from "react-router-dom";
 
 const Menu = () => {
   const padding = {
@@ -80,14 +80,14 @@ const Footer = () => (
   </div>
 );
 
-const CreateNew = (props) => {
+const CreateNew = ({ addNew }) => {
   const [content, setContent] = useState("");
   const [author, setAuthor] = useState("");
   const [info, setInfo] = useState("");
 
   const handleSubmit = (e) => {
     e.preventDefault();
-    props.addNew({
+    addNew?.({
       content,
       author,
       info,
@@ -129,33 +129,44 @@ const CreateNew = (props) => {
   );
 };
 
-const App = () => {
-  const [anecdotes, setAnecdotes] = useState([
-    {
-      content: "If it hurts, do it more often",
-      author: "Jez Humble",
-      info: "https://martinfowler.com/bliki/FrequencyReducesDifficulty.html",
-      votes: 0,
-      id: 1,
-    },
-    {
-      content: "Premature optimization is the root of all evil",
-      author: "Donald Knuth",
-      info: "http://wiki.c2.com/?PrematureOptimization",
-      votes: 0,
-      id: 2,
-    },
-  ]);
+const initAnecdotes = [
+  {
+    content: "If it hurts, do it more often",
+    author: "Jez Humble",
+    info: "https://martinfowler.com/bliki/FrequencyReducesDifficulty.html",
+    votes: 0,
+    id: 1,
+  },
+  {
+    content: "Premature optimization is the root of all evil",
+    author: "Donald Knuth",
+    info: "http://wiki.c2.com/?PrematureOptimization",
+    votes: 0,
+    id: 2,
+  },
+];
 
+const App = () => {
+  const navigate = useNavigate();
+  const [anecdotes, setAnecdotes] = useState(initAnecdotes);
   const [notification, setNotification] = useState("");
+
+  const showNotification = (message = "") => {
+    setNotification(message);
+
+    setTimeout(() => {
+      setNotification("");
+    }, 2000);
+  };
 
   const addNew = (anecdote) => {
     anecdote.id = Math.round(Math.random() * 10000);
     setAnecdotes(anecdotes.concat(anecdote));
+    navigate("/");
+    showNotification(anecdote.content);
   };
 
   const anecdoteById = (id) => anecdotes.find((a) => a.id === id);
-
   const match = useMatch("/anecdotes/:id");
   const anecdote = match
     ? anecdotes.find((item) => item.id === Number(match.params.id))
@@ -163,7 +174,6 @@ const App = () => {
 
   const vote = (id) => {
     const anecdote = anecdoteById(id);
-
     const voted = {
       ...anecdote,
       votes: anecdote.votes + 1,
@@ -172,10 +182,18 @@ const App = () => {
     setAnecdotes(anecdotes.map((a) => (a.id === id ? voted : a)));
   };
 
+  const notiStyle = {
+    border: "solid",
+    padding: 10,
+    borderWidth: 1,
+    marginBottom: 5,
+  };
+
   return (
     <div>
       <h1>Software anecdotes</h1>
       <Menu />
+      {notification ? <div style={notiStyle}>{notification}</div> : null}
       <Routes>
         <Route path="/" element={<AnecdoteList anecdotes={anecdotes} />} />
         <Route

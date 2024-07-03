@@ -50,7 +50,7 @@ const App = () => {
       const res = await loginService.login(userInfo);
       window.localStorage.setItem(
         "loggedBlogsappUser",
-        JSON.stringify(res.data)
+        JSON.stringify(res.data),
       );
       blogService.setToken(res.data.token);
       setUser(res.data || {});

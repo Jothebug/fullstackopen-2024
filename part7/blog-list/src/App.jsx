@@ -2,25 +2,17 @@ import { useState, useEffect } from "react";
 import { Notification, Blog } from "./components";
 import blogService from "./services/blogs";
 import loginService from "./services/login";
+import Blogs from "./components/Blogs";
+import CreateBlog from "./components/CreateBlog";
 
-const INIT_BLOG = { title: "", author: "", url: "" };
+// const INIT_BLOG = { title: "", author: "", url: "" };
+
 const App = () => {
   const [blogs, setBlogs] = useState([]);
   const [user, setUser] = useState(null);
   const [userInfo, setUserInfo] = useState({ username: "", password: "" });
   const [newBlog, setNewBlog] = useState(INIT_BLOG);
-  const [notification, setNotification] = useState({
-    type: "success",
-    message: null,
-  });
   const { username, password } = userInfo;
-
-  const handleNotification = (data = {}) => {
-    setNotification(data);
-    setTimeout(() => {
-      setNotification({ type: "success", message: null });
-    }, 5000);
-  };
 
   const fetchBlogs = async () => {
     try {
@@ -69,15 +61,9 @@ const App = () => {
     event.preventDefault();
     try {
       const res = await blogService.createBlog(newBlog);
-      handleNotification({
-        type: "success",
-        message: `a new blog ${res.title} by ${res.author} added`,
-      });
       await fetchBlogs();
       setNewBlog(INIT_BLOG);
-    } catch (error) {
-      handleNotification({ type: "error", message: error.message });
-    }
+    } catch (error) {}
   };
 
   const loginForm = () => {
@@ -156,7 +142,8 @@ const App = () => {
 
   return (
     <div>
-      <Notification {...notification} />
+      <h2>Blog List</h2>
+      <Notification />
       <h2>{user === null ? "Log in to application" : "Blogs"}</h2>
       {user === null ? (
         loginForm()
@@ -168,10 +155,9 @@ const App = () => {
               logout
             </button>
           </p>
-          {createBlogForm()}
-          {blogs.map((blog) => (
-            <Blog key={blog.id} blog={blog} />
-          ))}
+          {/* {createBlogForm()} */}
+          <CreateBlog />
+          <Blogs blogs={blogs} />
         </div>
       )}
     </div>

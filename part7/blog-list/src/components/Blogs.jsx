@@ -6,11 +6,11 @@ const Blogs = () => {
   const dispatch = useDispatch();
   const blogs = useSelector((state) => state.blogs);
 
-  useEffect(() => {
-    (async () => {
-      dispatch(initializeBlogs());
-    })();
-  }, []);
+  // useEffect(() => {
+  //   (async () => {
+  //     dispatch(initializeBlogs());
+  //   })();
+  // }, []);
 
   return (
     <div>

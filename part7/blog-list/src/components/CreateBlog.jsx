@@ -1,7 +1,7 @@
 import { useDispatch } from "react-redux";
 import { useField } from "../hooks";
-import { createBlog } from "../reducers/blogReducer";
 import { setNotification } from "../reducers/notificationReducer";
+import { createBlog } from "../reducers/blogsReducer";
 
 const CreateBlog = () => {
   const dispatch = useDispatch();

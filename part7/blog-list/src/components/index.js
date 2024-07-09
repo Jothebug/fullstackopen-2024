@@ -1,5 +1,5 @@
 import Blog from "./Blog";
 import Notification from "./Notification";
-import AuthenForm from "./AuthenForm";
+import Authentication from "./Authentication";
 
-export { Blog, Notification, AuthenForm };
+export { Blog, Notification, Authentication };

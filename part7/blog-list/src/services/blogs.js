@@ -16,4 +16,4 @@ const createBlog = async (newBlog) => {
   return data;
 };
 
-export default { getAll, createBlog, setToken };
+export default { getAll, createBlog };

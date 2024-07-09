@@ -18,9 +18,9 @@ export const { createNotification, clearNotification } =
 export default notificationSlice.reducer;
 
 export const setNotification =
-  (content = "", timeout = 100) =>
+  ({ message = "", type = "success", timeout = 2000 }) =>
   (dispatch) => {
-    dispatch(createNotification(content));
+    dispatch(createNotification({ message, type }));
     setTimeout(() => {
       dispatch(clearNotification(""));
     }, timeout);

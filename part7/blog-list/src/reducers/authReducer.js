@@ -3,7 +3,7 @@ import loginService from "../services/login";
 
 const authSlice = createSlice({
   name: "user",
-  initialState: {},
+  initialState: null,
   reducers: {
     authen(_, action) {
       return action.payload;
@@ -35,3 +35,9 @@ export const login =
       dispatch(setUser(res));
     }
   };
+
+export const logout = () => (dispatch) => {
+  window.localStorage.removeItem("@USER");
+  window.localStorage.removeItem("@TOKEN");
+  dispatch(setUser(null));
+};

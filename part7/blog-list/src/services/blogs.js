@@ -9,11 +9,19 @@ const getAll = async () => {
 };
 
 const createBlog = async (newBlog) => {
-  const config = {
-    headers: { Authorization: `Bearer ${token}` },
-  };
+  const config = { headers: { Authorization: `Bearer ${token}` } };
   const { data } = await axios.post(baseUrl, newBlog, config);
   return data;
 };
 
-export default { getAll, createBlog };
+const updateBlog = async ({ id, data }) => {
+  const res = await axios.put(`${baseUrl}/${id}`, data);
+  return res.data;
+};
+
+const deleteBlog = async ({ id }) => {
+  const config = { headers: { Authorization: `Bearer ${token}` } };
+  await axios.delete(`${baseUrl}/${id}`, config);
+};
+
+export default { getAll, createBlog, updateBlog, deleteBlog };

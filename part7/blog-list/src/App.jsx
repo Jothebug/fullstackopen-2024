@@ -17,11 +17,9 @@ const App = () => {
     })();
   }, []);
 
-  console.log("user", user);
-
   return (
     <div>
-      <h2>Blog List</h2>
+      <h1>Blogs</h1>
       <Notification />
       <Authentication />
       {user && (

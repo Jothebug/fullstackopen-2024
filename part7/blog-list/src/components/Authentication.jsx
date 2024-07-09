@@ -48,14 +48,15 @@ const Authentication = () => {
   }
 
   return (
-    <div>
+    <>
+      <h3>User information</h3>
       <p>
         {user.name} logged in{" "}
         <button type="button" onClick={onLogout}>
           logout
         </button>
       </p>
-    </div>
+    </>
   );
 };
 export default Authentication;

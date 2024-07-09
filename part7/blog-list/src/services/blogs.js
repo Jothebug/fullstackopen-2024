@@ -4,7 +4,7 @@ const baseUrl = "/api/blogs";
 const token = window.localStorage.getItem("@TOKEN");
 
 const getAll = async () => {
-  const { data } = axios.get(baseUrl);
+  const { data } = await axios.get(baseUrl);
   return data;
 };
 

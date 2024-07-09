@@ -9,6 +9,12 @@ const CreateBlog = () => {
   const author = useField("author");
   const url = useField("url");
 
+  const onClearInput = () => {
+    title.onClear();
+    author.onClear();
+    url.onClear();
+  };
+
   const addBlog = async (event) => {
     event.preventDefault();
     const newBlog = {
@@ -17,17 +23,26 @@ const CreateBlog = () => {
       url: url.value,
     };
     dispatch(createBlog(newBlog));
-    dispatch(setNotification(`new ${title.value} added`, 1000));
+    onClearInput();
+    dispatch(
+      setNotification({ message: `new ${title.value} added`, type: "success" }),
+    );
   };
 
   return (
     <div>
       <h2>Create new</h2>
       <form onSubmit={addBlog}>
-        <input {...title} />
-        <input {...author} />
-        <input {...url} />
-        <button type="submit">create</button>
+        <div>
+          title <input {...title} />
+        </div>
+        <div>
+          author <input {...author} />
+        </div>
+        <div>
+          url <input {...url} />
+          <button type="submit">create</button>
+        </div>
       </form>
     </div>
   );

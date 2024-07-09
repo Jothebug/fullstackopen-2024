@@ -6,15 +6,20 @@ import { setNotification } from "../reducers/notificationReducer";
 const Authentication = () => {
   const dispatch = useDispatch();
   const user = useSelector((state) => state.user);
-
   const username = useField("username");
   const password = useField("password");
+
+  const onClearInput = () => {
+    username.onClear();
+    password.onClear();
+  };
 
   const onLogin = async (event) => {
     event.preventDefault();
     try {
       const params = { username: username.value, password: password.value };
       await dispatch(login(params));
+      onClearInput();
     } catch (error) {
       const message = error.response.data.error;
       dispatch(setNotification({ message, type: "error" }));
@@ -22,7 +27,7 @@ const Authentication = () => {
   };
 
   const onLogout = () => {
-    dispatch(logout);
+    dispatch(logout());
   };
 
   if (!user) {

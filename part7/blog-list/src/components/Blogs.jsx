@@ -1,16 +1,7 @@
-import { useEffect } from "react";
-import { useDispatch, useSelector } from "react-redux";
-import { initializeBlogs } from "../reducers/blogsReducer";
+import { useSelector } from "react-redux";
 
 const Blogs = () => {
-  const dispatch = useDispatch();
   const blogs = useSelector((state) => state.blogs);
-
-  // useEffect(() => {
-  //   (async () => {
-  //     dispatch(initializeBlogs());
-  //   })();
-  // }, []);
 
   return (
     <div>

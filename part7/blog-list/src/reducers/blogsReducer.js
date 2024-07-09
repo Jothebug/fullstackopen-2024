@@ -24,7 +24,11 @@ export const initializeBlogs = () => async (dispatch) => {
 
 export const createBlog =
   (newBlog = {}) =>
-  async (dispatch) => {
+  async (dispatch, getState) => {
+    const blogs = getState().blogs;
     const data = await blogsService.createBlog(newBlog);
-    dispatch(create(data));
+    if (data) {
+      const updatedBlogs = [...blogs, data];
+      dispatch(setBlogs(updatedBlogs));
+    }
   };

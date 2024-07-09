@@ -30,14 +30,14 @@ export const login =
   async (dispatch) => {
     const res = await loginService.login(data);
     if (res) {
-      window.localStorage.setItem("@USER", JSON.stringify(res));
-      window.localStorage.setItem("@TOKEN", res.token);
+      localStorage.setItem("@USER", JSON.stringify(res));
+      localStorage.setItem("@TOKEN", res.token);
       dispatch(setUser(res));
     }
   };
 
 export const logout = () => (dispatch) => {
-  window.localStorage.removeItem("@USER");
-  window.localStorage.removeItem("@TOKEN");
+  localStorage.removeItem("@USER");
+  localStorage.removeItem("@TOKEN");
   dispatch(setUser(null));
 };

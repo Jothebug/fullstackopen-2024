@@ -12,10 +12,12 @@ const App = () => {
 
   useEffect(() => {
     (async () => {
-      // await dispatch(initializeBlogs());
       dispatch(initialUser());
+      await dispatch(initializeBlogs());
     })();
   }, []);
+
+  console.log("user", user);
 
   return (
     <div>
@@ -24,8 +26,8 @@ const App = () => {
       <Authentication />
       {user && (
         <>
-          <CreateBlog />
           <Blogs />
+          <CreateBlog />
         </>
       )}
     </div>

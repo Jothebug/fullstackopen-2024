@@ -11,38 +11,6 @@ const Blogs = () => {
   const blogs = useSelector((state) => state.blogs);
   const [isVisibleForm, setVisibleForm] = useState(false);
 
-  const onLikeBlog = useCallback(async ({ id, data }) => {
-    try {
-      await dispatch(updateBlog({ id, data }));
-      dispatch(
-        setNotification({
-          message: `${data.title} by ${data.author} liked!`,
-        }),
-      );
-    } catch (error) {
-      dispatch(
-        setNotification({
-          type: "error",
-          message: `${error.message}`,
-        }),
-      );
-    }
-  }, []);
-
-  const onDeleteBlog = useCallback(async ({ item }) => {
-    try {
-      await dispatch(deleteBlog({ id: item.id }));
-      dispatch(
-        setNotification({
-          message: `Delete ${item.title} successfully`,
-        }),
-      );
-    } catch (error) {
-      const message = error?.response?.data?.error || "";
-      dispatch(setNotification({ type: "error", message }));
-    }
-  }, []);
-
   const style = {
     border: "solid",
     padding: 10,

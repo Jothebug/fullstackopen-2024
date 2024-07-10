@@ -5,6 +5,7 @@ import {
   Users,
   Menu,
   UserBlog,
+  Blog,
 } from "./components";
 import Blogs from "./components/Blogs";
 import CreateBlog from "./components/CreateBlog";
@@ -37,14 +38,7 @@ const App = () => {
           <Route path="/" element={<Blogs />} />
           <Route path="/users" element={<Users />} />
           <Route path="/users/:id" element={<UserBlog />} />
-
-          {/*{user && (
-          <>
-            <Users />
-            <Blogs />
-            <CreateBlog />
-          </>
-        )} */}
+          <Route path="/blogs/:id" element={<Blog />} />
         </Routes>
       ) : (
         <Authentication />

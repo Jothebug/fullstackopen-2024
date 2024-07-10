@@ -13,10 +13,10 @@ const Menu = () => {
   return (
     <div className="menu">
       <Link className="menu-item" to="/">
-        blogs
+        Blogs
       </Link>
       <Link className="menu-item" to="/users">
-        users
+        Users
       </Link>
       {user && (
         <>

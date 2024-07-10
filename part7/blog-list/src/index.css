@@ -26,6 +26,14 @@
   width: calc(18%);
 }
 
+.label-column {
+  width: calc(4%);
+}
+
+.form {
+  padding-bottom: 10px;
+}
+
 .menu {
   background: lightgrey;
   padding: 10px;

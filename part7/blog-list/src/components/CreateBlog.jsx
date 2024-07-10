@@ -3,7 +3,16 @@ import { useField } from "../hooks";
 import { setNotification } from "../reducers/notificationReducer";
 import { createBlog } from "../reducers/blogsReducer";
 
-const CreateBlog = () => {
+const Form = ({ label, value }) => {
+  return (
+    <div className="users-list form">
+      <div className="label-column">{label}</div>
+      <input {...value} />
+    </div>
+  );
+};
+
+const CreateBlog = ({ onCancel }) => {
   const dispatch = useDispatch();
   const title = useField("title");
   const author = useField("author");
@@ -30,18 +39,19 @@ const CreateBlog = () => {
   };
 
   return (
-    <div>
+    <div style={{ marginBottom: 15 }}>
       <h2>Create new</h2>
       <form onSubmit={addBlog}>
+        <Form label={"title"} value={title} />
+        <Form label={"author"} value={author} />
+        <Form label={"url"} value={url} />
         <div>
-          title <input {...title} />
-        </div>
-        <div>
-          author <input {...author} />
-        </div>
-        <div>
-          url <input {...url} />
-          <button type="submit">create</button>
+          <button style={{ marginRight: 10 }} type="submit">
+            confirm
+          </button>
+          <button type="button" onClick={onCancel}>
+            cancel
+          </button>
         </div>
       </form>
     </div>

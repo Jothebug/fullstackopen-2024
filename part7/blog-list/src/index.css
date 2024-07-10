@@ -25,3 +25,12 @@
 .user-column {
   width: calc(18%);
 }
+
+.menu {
+  background: lightgrey;
+  padding: 10px;
+}
+
+.menu-item {
+  padding-right: 10px;
+}

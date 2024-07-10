@@ -1,11 +1,18 @@
 import { useState, useEffect } from "react";
-import { Notification, Authentication, Users } from "./components";
+import {
+  Notification,
+  Authentication,
+  Users,
+  Menu,
+  UserBlog,
+} from "./components";
 import Blogs from "./components/Blogs";
 import CreateBlog from "./components/CreateBlog";
 import { useDispatch, useSelector } from "react-redux";
 import { initializeBlogs } from "./reducers/blogsReducer";
 import { initialUser } from "./reducers/authReducer";
 import { initializeUsers } from "./reducers/usersReducer";
+import { Route, Routes, useMatch } from "react-router-dom";
 
 const App = () => {
   const dispatch = useDispatch();
@@ -23,15 +30,24 @@ const App = () => {
 
   return (
     <div>
-      <h1>Blogs</h1>
+      <Menu />
       <Notification />
-      <Authentication />
-      {user && (
-        <>
-          <Users />
-          <Blogs />
-          <CreateBlog />
-        </>
+      {user ? (
+        <Routes>
+          <Route path="/" element={<Blogs />} />
+          <Route path="/users" element={<Users />} />
+          <Route path="/users/:id" element={<UserBlog />} />
+
+          {/*{user && (
+          <>
+            <Users />
+            <Blogs />
+            <CreateBlog />
+          </>
+        )} */}
+        </Routes>
+      ) : (
+        <Authentication />
       )}
     </div>
   );

@@ -1,10 +1,11 @@
 import { useState, useEffect } from "react";
-import { Notification, Authentication } from "./components";
+import { Notification, Authentication, Users } from "./components";
 import Blogs from "./components/Blogs";
 import CreateBlog from "./components/CreateBlog";
 import { useDispatch, useSelector } from "react-redux";
 import { initializeBlogs } from "./reducers/blogsReducer";
 import { initialUser } from "./reducers/authReducer";
+import { initializeUsers } from "./reducers/usersReducer";
 
 const App = () => {
   const dispatch = useDispatch();
@@ -13,7 +14,10 @@ const App = () => {
   useEffect(() => {
     (async () => {
       dispatch(initialUser());
-      await dispatch(initializeBlogs());
+      await Promise.allSettled([
+        dispatch(initializeBlogs()),
+        dispatch(initializeUsers()),
+      ]);
     })();
   }, []);
 
@@ -24,6 +28,7 @@ const App = () => {
       <Authentication />
       {user && (
         <>
+          <Users />
           <Blogs />
           <CreateBlog />
         </>

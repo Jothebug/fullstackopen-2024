@@ -17,3 +17,11 @@
   padding: 10px;
   margin-bottom: 10px;
 }
+
+.users-list {
+  display: flex;
+}
+
+.user-column {
+  width: calc(18%);
+}

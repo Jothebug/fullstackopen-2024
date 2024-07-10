@@ -35,12 +35,8 @@ const Blogs = () => {
         }),
       );
     } catch (error) {
-      dispatch(
-        setNotification({
-          type: "error",
-          message: `${error.message}`,
-        }),
-      );
+      const message = error?.response?.data?.error || "";
+      dispatch(setNotification({ type: "error", message }));
     }
   }, []);
 

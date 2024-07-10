@@ -66,7 +66,7 @@ blogsRouter.delete("/:id", async (request, response, next) => {
     } else {
       return response
         .status(401)
-        .json({ error: "no authentication on selected item" });
+        .json({ error: "No authentication on selected item" });
     }
   } catch (error) {
     next(error);

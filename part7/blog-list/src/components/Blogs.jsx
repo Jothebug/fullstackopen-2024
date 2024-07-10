@@ -1,13 +1,9 @@
-import { useDispatch, useSelector } from "react-redux";
-import Blog from "./Blog";
-import { useCallback, useState } from "react";
-import { deleteBlog, updateBlog } from "../reducers/blogsReducer";
-import { setNotification } from "../reducers/notificationReducer";
+import { useSelector } from "react-redux";
+import { useState } from "react";
 import { Link } from "react-router-dom";
 import CreateBlog from "./CreateBlog";
 
 const Blogs = () => {
-  const dispatch = useDispatch();
   const blogs = useSelector((state) => state.blogs);
   const [isVisibleForm, setVisibleForm] = useState(false);
 

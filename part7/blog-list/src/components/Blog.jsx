@@ -3,14 +3,18 @@ import { useDispatch, useSelector } from "react-redux";
 import { useMatch } from "react-router-dom";
 import { deleteBlog, updateBlog } from "../reducers/blogsReducer";
 import { setNotification } from "../reducers/notificationReducer";
+import { useField } from "../hooks";
 
 const Blog = () => {
   const dispatch = useDispatch();
   const blogs = useSelector((state) => state.blogs);
+
   const match = useMatch("/blogs/:id");
   const blog = blogs.find(({ id }) => id === match.params.id);
-  const { id, author, title, url, likes = 0 } = blog || {};
+  const { id, author, title, url, likes = 0, comments = [] } = blog || {};
+
   const [countLikes, setLikes] = useState(likes);
+  const _comment = useField("comment");
 
   const onLikeBlog = async ({ data }) => {
     try {
@@ -53,6 +57,20 @@ const Blog = () => {
     }
   };
 
+  const onAddComment = async () => {
+    try {
+      const data = { comment: _comment.value };
+      await dispatch(updateBlog({ id, data }));
+    } catch (error) {
+      dispatch(
+        setNotification({
+          type: "error",
+          message: `${error.message}`,
+        }),
+      );
+    }
+  };
+
   if (!blog) return <div>Not found</div>;
 
   return (
@@ -67,6 +85,21 @@ const Blog = () => {
           like
         </button>
         <button onClick={onDeleteBlog}>delete</button>
+      </div>
+
+      <div>
+        <h4>comments</h4>
+        <form className="users-list form" onSubmit={onAddComment}>
+          <input {..._comment} />
+          <button type="submit">add comment</button>
+        </form>
+        {comments.length > 0 ? (
+          <ul>
+            {comments.map((item, index) => (
+              <li key={index}>{item}</li>
+            ))}
+          </ul>
+        ) : null}
       </div>
     </div>
   );

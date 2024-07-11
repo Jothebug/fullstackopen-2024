@@ -79,7 +79,8 @@ blogsRouter.put("/:id", async (request, response, next) => {
     const { title, author, url, likes, comment } = request.body;
     if (comment) {
       const blog = await Blog.findById(request.params.id);
-      const updatedComment = blog?.comments.concat(comment);
+      const updatedComment = blog?.comments?.concat(comment);
+
       const updatedBlog = await Blog.findByIdAndUpdate(
         request.params.id,
         {

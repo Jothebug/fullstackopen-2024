@@ -32,10 +32,14 @@ export const createBlog =
 
 export const updateBlog =
   ({ id, data = {} }) =>
-  async (dispatch) => {
+  async (dispatch, getState) => {
+    const blogs = getState().blogs;
+    let updatedBlogs = [...blogs];
     const res = await blogsService.updateBlog({ id, data });
-    if (res) {
-      await dispatch(initializeBlogs());
+    const index = blogs.findIndex((item) => item.id === id);
+    if (index > -1 && res) {
+      updatedBlogs[index] = res;
+      dispatch(setBlogs(updatedBlogs));
     }
   };
 

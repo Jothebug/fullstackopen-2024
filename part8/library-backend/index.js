@@ -91,12 +91,14 @@ const typeDefs = `
      name: String!
      id: ID!
      born: Int
+     bookCount: Int
   }
   type Query {
      bookCount: Int!
      authorCount: Int!
      allBooks: [Book!]!
-  }
+     allAuthors: [Author!]!
+    }
 `;
 
 const resolvers = {
@@ -104,6 +106,20 @@ const resolvers = {
     bookCount: () => books.length,
     authorCount: () => authors.length,
     allBooks: () => books,
+    allAuthors: () => {
+      const countedObj = books.reduce(
+        (curr, { author }) => ({
+          ...curr,
+          [author]: curr[author] ? ++curr[author] : 1,
+        }),
+        {}
+      );
+      const result = [];
+      for (const [key, value] of Object.entries(countedObj)) {
+        result.push({ name: key, bookCount: value });
+      }
+      return result;
+    },
   },
 };
 

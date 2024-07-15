@@ -3,6 +3,7 @@ import { ALL_AUTHORS } from "../services";
 
 const Authors = () => {
   const result = useQuery(ALL_AUTHORS);
+
   if (result.loading) return <div>loading...</div>;
 
   return (

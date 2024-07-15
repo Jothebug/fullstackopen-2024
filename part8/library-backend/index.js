@@ -81,6 +81,7 @@ let books = [
   },
 ];
 
+// allBooks(author:String, genre:String): [Book!]
 const typeDefs = `
   type Book {
      title: String!
@@ -98,7 +99,7 @@ const typeDefs = `
   type Query {
      bookCount: Int!
      authorCount: Int!
-     allBooks(author:String, genre:String): [Book!]!
+     allBooks: [Book!]!
      allAuthors: [Author!]!
     }
   
@@ -121,42 +122,43 @@ const resolvers = {
   Query: {
     bookCount: () => books.length,
     authorCount: () => authors.length,
-    allBooks: (_, args) => {
-      if (!args) return books;
+    // allBooks: (_, args) => {
+    //   if (!args) return books;
 
-      if (args.author && !args.genre) {
-        const byAuthor = [];
-        books.forEach((item = {}) => {
-          if (item.author === args.author) {
-            byAuthor.push({ title: item.title });
-          }
-        });
-        return byAuthor;
-      }
+    //   if (args.author && !args.genre) {
+    //     const byAuthor = [];
+    //     books.forEach((item = {}) => {
+    //       if (item.author === args.author) {
+    //         byAuthor.push({ title: item.title });
+    //       }
+    //     });
+    //     return byAuthor;
+    //   }
 
-      if (args.genre && !args.author) {
-        const byGenre = [];
-        books.forEach((item = {}) => {
-          if (item?.genres?.includes(args?.genre)) {
-            byGenre.push({ title: item.title, author: item.author });
-          }
-        });
-        return byGenre;
-      }
+    //   if (args.genre && !args.author) {
+    //     const byGenre = [];
+    //     books.forEach((item = {}) => {
+    //       if (item?.genres?.includes(args?.genre)) {
+    //         byGenre.push({ title: item.title, author: item.author });
+    //       }
+    //     });
+    //     return byGenre;
+    //   }
 
-      if (args.genre && args.author) {
-        const byAuthorGenre = [];
-        books.forEach((item = {}) => {
-          if (
-            item.author === args.author &&
-            item?.genres?.includes(args.genre)
-          ) {
-            byAuthorGenre.push({ title: item.title, author: item.author });
-          }
-        });
-        return byAuthorGenre;
-      }
-    },
+    //   if (args.genre && args.author) {
+    //     const byAuthorGenre = [];
+    //     books.forEach((item = {}) => {
+    //       if (
+    //         item.author === args.author &&
+    //         item?.genres?.includes(args.genre)
+    //       ) {
+    //         byAuthorGenre.push({ title: item.title, author: item.author });
+    //       }
+    //     });
+    //     return byAuthorGenre;
+    //   }
+    // },
+    allBooks: () => books,
     allAuthors: () => {
       const countedObj = books.reduce(
         (curr, item = {}) => ({

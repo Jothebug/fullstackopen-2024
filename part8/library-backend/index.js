@@ -159,16 +159,18 @@ const resolvers = {
     },
     allAuthors: () => {
       const countedObj = books.reduce(
-        (curr, { author }) => ({
+        (curr, item = {}) => ({
           ...curr,
-          [author]: curr[author] ? ++curr[author] : 1,
+          [item.author]: curr[item.author] ? ++curr[item.author] : 1,
         }),
         {}
       );
       const result = [];
-      for (const [key, value] of Object.entries(countedObj)) {
-        result.push({ name: key, bookCount: value });
-      }
+      authors.forEach((item) => {
+        if (countedObj[item.name]) {
+          result.push({ ...item, bookCount: countedObj[item.name] });
+        }
+      });
       return result;
     },
   },

@@ -17,7 +17,7 @@ const App = () => {
       <Menu />
       <Notification {...notify} />
       <Routes>
-        <Route path="/" element={<Authors />} />
+        <Route path="/" element={<Authors handleNotify={handleNotify} />} />
         <Route path="/books" element={<Books />} />
         <Route
           path="/add-book"

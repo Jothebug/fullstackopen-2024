@@ -4,7 +4,7 @@ import { useState } from "react";
 
 const Authors = ({ handleNotify }) => {
   const result = useQuery(ALL_AUTHORS);
-  const [name, setName] = useState("");
+  const [name, setName] = useState(result?.data?.allAuthors?.[0].name || "");
   const [born, setBorn] = useState("");
 
   const [editAuthor] = useMutation(EDIT_AUTHOR, {
@@ -18,8 +18,8 @@ const Authors = ({ handleNotify }) => {
   const onSubmit = (event) => {
     event.preventDefault();
     editAuthor({ variables: { name, born: Number(born) } });
-    setName("");
     setBorn("");
+    setName("");
   };
 
   if (result.loading) return <div>loading...</div>;
@@ -43,24 +43,31 @@ const Authors = ({ handleNotify }) => {
           ))}
         </tbody>
       </table>
-      <h2>set birthyear</h2>
-      <form onSubmit={onSubmit}>
-        <div>
-          name{" "}
-          <input
-            value={name}
-            onChange={({ target }) => setName(target.value)}
-          />
-        </div>
-        <div>
-          born{" "}
-          <input
-            value={born}
-            onChange={({ target }) => setBorn(target.value)}
-          />
-        </div>
-        <button type="submit">update author</button>
-      </form>
+      {result.data.allAuthors && (
+        <>
+          <h2>set birthyear</h2>
+          <form onSubmit={onSubmit}>
+            <div>
+              name{" "}
+              <select value={name} onChange={(e) => setName(e.target.value)}>
+                {result.data.allAuthors?.map(({ name }) => (
+                  <option key={name} value={name}>
+                    {name}
+                  </option>
+                ))}
+              </select>
+            </div>
+            <div>
+              born{" "}
+              <input
+                value={born}
+                onChange={({ target }) => setBorn(target.value)}
+              />
+            </div>
+            <button type="submit">update author</button>
+          </form>
+        </>
+      )}
     </div>
   );
 };

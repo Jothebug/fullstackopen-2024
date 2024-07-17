@@ -58,21 +58,28 @@ const resolvers = {
     },
 
     editAuthor: async (_, args, context) => {
+      if (!args.name || !args.born) return null;
+
       const currentUser = context.currentUser;
       if (!currentUser) {
         throw new GraphQLError("Not authenticated", {
           extensions: { code: "BAD_USER_INPUT" },
         });
       }
-      const existedAuthor = Author.findOne({ name: args.name });
-      if (!existedAuthor) {
-        throw new GraphQLError("The author does not exist", {
-          extensions: { code: "BAD_USER_INPUT", invalidArgs: args.name },
-        });
-      }
-      existedAuthor.born = args.born;
+
       try {
-        await existedAuthor.save();
+        const filter = { name: args.name };
+        const update = { born: args.born };
+        const existedAuthor = await Author.findOne(filter);
+        if (!existedAuthor) {
+          throw new GraphQLError("The author does not exist", {
+            extensions: { code: "BAD_USER_INPUT", invalidArgs: args.name },
+          });
+        }
+        const upadtedAuthor = await Author.findOneAndUpdate(filter, update, {
+          new: true,
+        });
+        return upadtedAuthor;
       } catch (error) {
         throw new GraphQLError("Editing born year failed", {
           extensions: {
@@ -82,7 +89,6 @@ const resolvers = {
           },
         });
       }
-      return existedAuthor;
     },
 
     createUser: async (_, args) => {

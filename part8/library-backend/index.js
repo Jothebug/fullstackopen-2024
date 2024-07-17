@@ -24,6 +24,7 @@ const resolvers = {
     bookCount: () => Book.collection.countDocuments(),
     allAuthors: async () => await Author.find({}),
     authorCount: () => Author.collection.countDocuments(),
+    me: async (_, args, context) => context.currentUser,
   },
   Mutation: {
     addBook: async (_, args, context) => {

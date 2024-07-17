@@ -18,12 +18,14 @@ const typeDefs = `
      id: ID!
      genres: [String!]!
   }
+
   type Query {
-     bookCount: Int!
-     authorCount: Int!
-     allBooks: [Book!]!
-     allAuthors: [Author!]!
-    }
+    allBooks: [Book!]!
+    bookCount: Int!
+    authorCount: Int!
+    allAuthors: [Author!]!
+  }
+
   type Mutation {
     addBook (
       title: String!

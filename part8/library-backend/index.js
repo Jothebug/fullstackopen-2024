@@ -20,15 +20,10 @@ mongoose
 
 const resolvers = {
   Query: {
+    allBooks: async () => await Book.find({}).populate("author"),
     bookCount: () => Book.collection.countDocuments(),
-    allBooks: async (root, args) => {
-      const books = await Book.find({}).populate("author");
-      return books;
-    },
-    allAuthors: async (root, args) => {
-      const authors = await Author.find({});
-      return authors;
-    },
+    allAuthors: async () => await Author.find({}),
+    authorCount: () => Author.collection.countDocuments(),
   },
   Mutation: {
     addBook: async (_, args, context) => {

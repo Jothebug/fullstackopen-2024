@@ -74,3 +74,12 @@ export const LOGIN = gql`
     }
   }
 `;
+
+export const USER = gql`
+  query {
+    me {
+      username
+      favoriteGenre
+    }
+  }
+`;

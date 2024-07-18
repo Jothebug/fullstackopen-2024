@@ -1,5 +1,12 @@
 import { Route, Routes } from "react-router-dom";
-import { Menu, Books, NewBook, Authors, Notification } from "./components";
+import {
+  Menu,
+  Books,
+  NewBook,
+  Authors,
+  Notification,
+  Recommend,
+} from "./components";
 import { useState } from "react";
 
 const App = () => {
@@ -23,6 +30,7 @@ const App = () => {
           path="/add-book"
           element={<NewBook handleNotify={handleNotify} />}
         />
+        <Route path="/recommend" element={<Recommend />} />
       </Routes>
     </div>
   );

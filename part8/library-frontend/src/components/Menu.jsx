@@ -12,6 +12,9 @@ const Menu = () => {
       <Link className="menu-item" to="/add-book">
         Add book
       </Link>
+      <Link className="menu-item" to="/recommend">
+        Recommend
+      </Link>
     </div>
   );
 };

@@ -1,7 +1,7 @@
 const typeDefs = `
   type User {
      username: String!
-     favoriteGenre: String!
+     favoriteGenre: String
      id: ID! 
   }
   type Token {value: String!}
@@ -39,6 +39,7 @@ const typeDefs = `
     ): Author
     createUser(
       username: String!
+      favoriteGenre: String
     ): User
     login(
       username: String!

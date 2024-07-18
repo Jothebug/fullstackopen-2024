@@ -101,7 +101,10 @@ const resolvers = {
     },
 
     createUser: async (_, args) => {
-      const user = new User({ username: args.username });
+      const user = new User({
+        username: args.username,
+        ...(args.favoriteGenre && { favoriteGenre: args.favoriteGenre }),
+      });
       return user.save().catch((error) => {
         throw new GraphQLError("Creating the user failed", {
           extensions: {
@@ -128,7 +131,6 @@ const resolvers = {
 };
 
 const server = new ApolloServer({ typeDefs, resolvers });
-
 startStandaloneServer(server, {
   listen: { port: process.env.PORT },
   context: async ({ req, _ }) => {

@@ -20,11 +20,19 @@ mongoose
 
 const resolvers = {
   Query: {
-    allBooks: async () => await Book.find({}).populate("author"),
+    allBooks: async (_, args) => {
+      if (!args.genre || args.genre === "All genres")
+        return await Book.find({}).populate("author");
+      const filteredBooks = (await Book.find({}).populate("author")).filter(
+        ({ genres } = {}) => genres.includes(args.genre)
+      );
+      return filteredBooks;
+    },
     bookCount: () => Book.collection.countDocuments(),
     allAuthors: async () => await Author.find({}),
     authorCount: () => Author.collection.countDocuments(),
     me: async (_, args, context) => context.currentUser,
+    allGenres: async () => await Book.distinct("genres"),
   },
   Mutation: {
     addBook: async (_, args, context) => {

@@ -1,8 +1,13 @@
-import { useMutation } from "@apollo/client";
-import { useState } from "react";
-import { ALL_BOOKS, CREATE_BOOK } from "../services";
+import { useState, useEffect } from "react";
+import { useMutation, useApolloClient } from "@apollo/client";
+
+import { ALL_AUTHORS, ALL_BOOKS, CREATE_BOOK } from "../services";
+import LoginForm from "./LoginForm";
 
 const NewBook = ({ handleNotify }) => {
+  const client = useApolloClient();
+  const [token, setToken] = useState(null);
+
   const [title, setTitle] = useState("");
   const [author, setAuthor] = useState("");
   const [published, setPublished] = useState("");
@@ -10,7 +15,7 @@ const NewBook = ({ handleNotify }) => {
   const [genres, setGenres] = useState([]);
 
   const [createBook] = useMutation(CREATE_BOOK, {
-    refetchQueries: [{ query: ALL_BOOKS }],
+    refetchQueries: [{ query: ALL_BOOKS }, { query: ALL_AUTHORS }],
     onError: (error) => {
       const message = error.graphQLErrors.map((e) => e.message).join("\n");
       handleNotify({ message, type: "error" });
@@ -36,8 +41,22 @@ const NewBook = ({ handleNotify }) => {
     setGenre("");
   };
 
+  const logout = async () => {
+    setToken(null);
+    localStorage.clear();
+    client.clearStore();
+  };
+
+  useEffect(() => {
+    const token = localStorage.getItem("@TOKEN");
+    setToken(token);
+  }, []);
+
+  if (!token) return <LoginForm setToken={setToken} />;
+
   return (
     <div>
+      <button onClick={logout}>Logout</button>
       <form onSubmit={submit}>
         <div>
           title

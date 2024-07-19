@@ -83,3 +83,16 @@ export const USER = gql`
     }
   }
 `;
+
+export const RECOMMENDED_LIST = gql`
+  query {
+    recommendedList {
+      id
+      title
+      author {
+        name
+      }
+      published
+    }
+  }
+`;

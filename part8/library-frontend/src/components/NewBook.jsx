@@ -1,7 +1,12 @@
 import { useState, useEffect } from "react";
 import { useMutation, useApolloClient } from "@apollo/client";
 
-import { ALL_AUTHORS, ALL_BOOKS, CREATE_BOOK } from "../services";
+import {
+  ALL_AUTHORS,
+  ALL_BOOKS,
+  CREATE_BOOK,
+  RECOMMENDED_LIST,
+} from "../services";
 import LoginForm from "./LoginForm";
 
 const NewBook = ({ handleNotify }) => {
@@ -15,7 +20,11 @@ const NewBook = ({ handleNotify }) => {
   const [genres, setGenres] = useState([]);
 
   const [createBook] = useMutation(CREATE_BOOK, {
-    refetchQueries: [{ query: ALL_BOOKS }, { query: ALL_AUTHORS }],
+    refetchQueries: [
+      { query: ALL_BOOKS },
+      { query: ALL_AUTHORS },
+      { query: RECOMMENDED_LIST },
+    ],
     onError: (error) => {
       const message = error.graphQLErrors.map((e) => e.message).join("\n");
       handleNotify({ message, type: "error" });

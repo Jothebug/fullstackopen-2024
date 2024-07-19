@@ -33,6 +33,22 @@ const resolvers = {
     authorCount: () => Author.collection.countDocuments(),
     me: async (_, args, context) => context.currentUser,
     allGenres: async () => await Book.distinct("genres"),
+    recommendedList: async (_, args, context) => {
+      const currentUser = context.currentUser;
+      if (!currentUser) {
+        throw new GraphQLError("Not authenticated", {
+          extensions: { code: "BAD_USER_INPUT" },
+        });
+      }
+      const favoriteGenre = currentUser.favoriteGenre;
+      let recommendedList = [];
+      if (favoriteGenre) {
+        recommendedList = (await Book.find({}).populate("author")).filter(
+          ({ genres }) => genres.includes(favoriteGenre)
+        );
+      }
+      return recommendedList;
+    },
   },
   Mutation: {
     addBook: async (_, args, context) => {

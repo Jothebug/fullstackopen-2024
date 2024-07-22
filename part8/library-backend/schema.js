@@ -31,7 +31,7 @@ const typeDefs = `
     addBook (
       title: String!
       published: Int!
-      author: String
+      author: String!
       genres: [String!]!
     ): Book
     editAuthor (
@@ -47,5 +47,9 @@ const typeDefs = `
       password: String!
     ): Token
   }
+  type Subscription {
+    bookAdded: Book!
+  }
 `;
+
 module.exports = typeDefs;

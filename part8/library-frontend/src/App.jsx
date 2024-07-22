@@ -1,4 +1,7 @@
 import { Route, Routes } from "react-router-dom";
+import { useState } from "react";
+import { useApolloClient, useSubscription } from "@apollo/client";
+
 import {
   Menu,
   Books,
@@ -7,7 +10,7 @@ import {
   Notification,
   Recommend,
 } from "./components";
-import { useState } from "react";
+import { BOOK_ADDED } from "./services";
 
 const App = () => {
   const [notify, setNotify] = useState({ message: "", type: "success" });
@@ -18,6 +21,15 @@ const App = () => {
       setNotify({ message: "", type: "success" });
     }, 5000);
   };
+
+  useSubscription(BOOK_ADDED, {
+    onData: ({ data }) => {
+      const addedBook = data?.data?.bookAdded.title;
+      if (addedBook) {
+        alert(`${addedBook} added`);
+      }
+    },
+  });
 
   return (
     <div>

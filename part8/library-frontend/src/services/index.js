@@ -96,3 +96,19 @@ export const RECOMMENDED_LIST = gql`
     }
   }
 `;
+
+export const BOOK_ADDED = gql`
+  subscription {
+    bookAdded {
+      id
+      title
+      author {
+        name
+        born
+        bookCount
+      }
+      published
+      genres
+    }
+  }
+`;

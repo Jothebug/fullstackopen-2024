@@ -1,5 +1,6 @@
 import { useState } from "react";
 import { useApolloClient, useQuery, useSubscription } from "@apollo/client";
+
 import {
   LoginForm,
   Notify,
@@ -7,7 +8,7 @@ import {
   Persons,
   PhoneForm,
 } from "./components";
-import { ADD_PERSON, ALL_PERSONS } from "./queries";
+import { ALL_PERSONS, PERSON_ADDED } from "./queries";
 
 export const updateCache = (cache, query, addedPerson) => {
   const uniqByName = (a) => {
@@ -24,10 +25,18 @@ export const updateCache = (cache, query, addedPerson) => {
 };
 
 const App = () => {
-  const [token, setToken] = useState(null);
-  const [errorMessage, setErrorMessage] = useState(null);
   const result = useQuery(ALL_PERSONS);
+  const [errorMessage, setErrorMessage] = useState(null);
+  const [token, setToken] = useState(null);
   const client = useApolloClient();
+
+  useSubscription(PERSON_ADDED, {
+    onData: ({ data }) => {
+      console.log({ data });
+      // const addedPerson = data.data.personAdded;
+      // updateCache(client.cache, { query: ALL_PERSONS }, addedPerson);
+    },
+  });
 
   const notify = (message) => {
     setErrorMessage(message);
@@ -35,13 +44,6 @@ const App = () => {
       setErrorMessage(null);
     }, 5000);
   };
-
-  useSubscription(ADD_PERSON, {
-    onData: ({ data }) => {
-      const addedPerson = data.data.personAdded;
-      updateCache(client.cache, { query: ALL_PERSONS }, addedPerson);
-    },
-  });
 
   const logout = () => {
     setToken(null);
@@ -51,14 +53,14 @@ const App = () => {
 
   if (result.loading) return <div>loading...</div>;
 
-  if (!token) {
-    return (
-      <div>
-        <Notify errorMessage={errorMessage} />
-        <LoginForm setToken={setToken} setError={notify} />
-      </div>
-    );
-  }
+  // if (!token) {
+  //   return (
+  //     <div>
+  //       <Notify errorMessage={errorMessage} />
+  //       <LoginForm setToken={setToken} setError={notify} />
+  //     </div>
+  //   );
+  // }
 
   return (
     <div>

@@ -12,8 +12,6 @@ const { WebSocketServer } = require("ws");
 const { useServer } = require("graphql-ws/lib/use/ws");
 const jwt = require("jsonwebtoken");
 const mongoose = require("mongoose");
-// mongoose.set("strictQuery", false);
-// const { startStandaloneServer } = require("@apollo/server/standalone");
 
 const User = require("./models/user");
 const typeDefs = require("./schema");

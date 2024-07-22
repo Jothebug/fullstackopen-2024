@@ -53,14 +53,14 @@ const App = () => {
 
   if (result.loading) return <div>loading...</div>;
 
-  // if (!token) {
-  //   return (
-  //     <div>
-  //       <Notify errorMessage={errorMessage} />
-  //       <LoginForm setToken={setToken} setError={notify} />
-  //     </div>
-  //   );
-  // }
+  if (!token) {
+    return (
+      <div>
+        <Notify errorMessage={errorMessage} />
+        <LoginForm setToken={setToken} setError={notify} />
+      </div>
+    );
+  }
 
   return (
     <div>

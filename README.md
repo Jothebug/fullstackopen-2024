@@ -1,12 +1,2 @@
-# npm 7+, extra double-dash is needed:
-
-npm create vite@latest part1 -- --template react
-
-# stop warning
-
-"react/prop-types": 0,
-
-# Running tests one by one
-
-npm test -- --test-only
-npm test -- tests/note_api.test.js
+![Alt text](https://studies.cs.helsinki.fi/stats/api/certificate/fullstackopen/en/bfb8859e7ff322857a582e6399f8d9d1)
+![Alt text](https://studies.cs.helsinki.fi/stats/api/certificate/fs-graphql/en/9d32a4b27f019b89faca552aaff16951)

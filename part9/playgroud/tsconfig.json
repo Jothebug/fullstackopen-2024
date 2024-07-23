@@ -1,0 +1,9 @@
+/**
+     This file is used to define how the TS compiler should interpret the code, how strictly the compiler should work
+     https: //www.typescriptlang.org/docs/handbook/tsconfig-json.html
+*/
+{
+     "compilerOptions": {
+          "noImplicitAny": true
+     }
+}

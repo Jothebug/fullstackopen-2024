@@ -7,6 +7,7 @@
     "@types/node": "^20.14.11"
   },
   "scripts": {
-    "calculateBmi": "ts-node bmiCalculator.ts"
+    "calculateBmi": "ts-node bmiCalculator.ts",
+    "calculateExercises": "ts-node exerciseCalculator.ts"
   }
 }
